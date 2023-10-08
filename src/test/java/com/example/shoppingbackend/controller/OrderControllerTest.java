@@ -2,9 +2,11 @@ package com.example.shoppingbackend.controller;
 
 import com.example.shoppingbackend.constant.OrderStatus;
 import com.example.shoppingbackend.exception.CustomerNotFoundException;
+import com.example.shoppingbackend.exception.OrderNotFoundException;
 import com.example.shoppingbackend.exception.ProductNotFoundException;
 import com.example.shoppingbackend.model.request.CreateOrderRequest;
 import com.example.shoppingbackend.model.response.CustomerOrdersResponse;
+import com.example.shoppingbackend.model.response.OrderDetails;
 import com.example.shoppingbackend.service.OrderService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -81,12 +83,12 @@ public class OrderControllerTest {
     @Test
     void should_return_the_correct_order_response() throws Exception {
 
-        CustomerOrdersResponse.OrderProductDetails orderProductDetails = new CustomerOrdersResponse.OrderProductDetails("bike", 3, 35);
-        CustomerOrdersResponse.OrderDetails orderDetails = new CustomerOrdersResponse.OrderDetails(List.of(orderProductDetails), 105, OrderStatus.CREATED);
+        OrderDetails.OrderProductDetails orderProductDetails = new OrderDetails.OrderProductDetails("bike", 3, 35);
+        OrderDetails orderDetails = new OrderDetails(List.of(orderProductDetails), 105, OrderStatus.CREATED);
         CustomerOrdersResponse response = new CustomerOrdersResponse(List.of(orderDetails));
 
         doReturn(response).when(orderService).findAllOrderByCustomerId(1L);
-        mockMvc.perform(get("/order/{id}", 1L)
+        mockMvc.perform(get("/order/{userId}", 1L)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.orders.[0].totalPrice", is(105)))
@@ -98,7 +100,31 @@ public class OrderControllerTest {
 
         doThrow(new CustomerNotFoundException("not found")).when(orderService).findAllOrderByCustomerId(1L);
 
-        mockMvc.perform(get("/order/{id}", 1L)
+        mockMvc.perform(get("/order/{userId}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void should_return_the_correct_order_response_by_order_id() throws Exception {
+
+        OrderDetails.OrderProductDetails orderProductDetails = new OrderDetails.OrderProductDetails("bike", 3, 35);
+        OrderDetails orderDetails = new OrderDetails(List.of(orderProductDetails), 105, OrderStatus.CREATED);
+
+        doReturn(orderDetails).when(orderService).findOrderByOrderId(1L);
+        mockMvc.perform(get("/order/detail/{orderId}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.totalPrice", is(105)))
+                .andExpect(jsonPath("$.orderStatus", is("CREATED")));
+    }
+
+    @Test
+    void should_throw_order_not_found_exception() throws Exception {
+
+        doThrow(new OrderNotFoundException("not found")).when(orderService).findOrderByOrderId(1L);
+
+        mockMvc.perform(get("/order/detail/{orderId}", 1L)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }

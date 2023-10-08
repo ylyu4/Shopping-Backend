@@ -1,6 +1,7 @@
 package com.example.shoppingbackend.service;
 
 import com.example.shoppingbackend.exception.CustomerNotFoundException;
+import com.example.shoppingbackend.exception.OrderNotFoundException;
 import com.example.shoppingbackend.exception.ProductNotFoundException;
 import com.example.shoppingbackend.model.Customer;
 import com.example.shoppingbackend.model.Order;
@@ -8,6 +9,7 @@ import com.example.shoppingbackend.model.OrderItem;
 import com.example.shoppingbackend.model.Product;
 import com.example.shoppingbackend.model.request.CreateOrderRequest;
 import com.example.shoppingbackend.model.response.CustomerOrdersResponse;
+import com.example.shoppingbackend.model.response.OrderDetails;
 import com.example.shoppingbackend.repository.CustomerRepository;
 import com.example.shoppingbackend.repository.OrderRepository;
 import com.example.shoppingbackend.repository.ProductRepository;
@@ -51,15 +53,23 @@ public class OrderService {
         Customer customer = customerRepository.findById(id).orElseThrow(() ->
                 new CustomerNotFoundException(String.format("Can not find customer by this id: %s", id)));
 
-        List<CustomerOrdersResponse.OrderDetails> orderDetails = customer.getOrders().stream().map(order -> {
-            List<CustomerOrdersResponse.OrderProductDetails> orderProductDetails = order.getOrderItems().stream()
-                    .map(orderItem -> new CustomerOrdersResponse.OrderProductDetails(orderItem.getProduct().getName(),
-                            orderItem.getQuantity(), orderItem.getProduct().getPrice())).toList();
-            Integer totalPrice = orderProductDetails.stream()
-                    .mapToInt(orderItem -> orderItem.getPrice() * orderItem.getQuantity()).sum();
-            return new CustomerOrdersResponse.OrderDetails(orderProductDetails, totalPrice, order.getOrderStatus());
-        }).toList();
-
+        List<OrderDetails> orderDetails = customer.getOrders().stream()
+                .map(this::convertOrderToOrderDetailResponse).toList();
         return new CustomerOrdersResponse(orderDetails);
+    }
+
+    public OrderDetails findOrderByOrderId(Long orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(() ->
+                new OrderNotFoundException(String.format("Can not find order by this id: %s", orderId)));
+        return convertOrderToOrderDetailResponse(order);
+    }
+
+    private OrderDetails convertOrderToOrderDetailResponse(Order order) {
+        List<OrderDetails.OrderProductDetails> orderProductDetails = order.getOrderItems().stream()
+                .map(orderItem -> new OrderDetails.OrderProductDetails(orderItem.getProduct().getName(),
+                        orderItem.getQuantity(), orderItem.getProduct().getPrice())).toList();
+        Integer totalPrice = orderProductDetails.stream()
+                .mapToInt(orderItem -> orderItem.getPrice() * orderItem.getQuantity()).sum();
+        return new OrderDetails(orderProductDetails, totalPrice, order.getOrderStatus());
     }
 }

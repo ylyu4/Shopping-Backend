@@ -2,6 +2,7 @@ package com.example.shoppingbackend.service;
 
 import com.example.shoppingbackend.constant.ProductStatus;
 import com.example.shoppingbackend.exception.CustomerNotFoundException;
+import com.example.shoppingbackend.exception.OrderNotFoundException;
 import com.example.shoppingbackend.exception.ProductNotFoundException;
 import com.example.shoppingbackend.model.Customer;
 import com.example.shoppingbackend.model.Order;
@@ -9,6 +10,7 @@ import com.example.shoppingbackend.model.OrderItem;
 import com.example.shoppingbackend.model.Product;
 import com.example.shoppingbackend.model.request.CreateOrderRequest;
 import com.example.shoppingbackend.model.response.CustomerOrdersResponse;
+import com.example.shoppingbackend.model.response.OrderDetails;
 import com.example.shoppingbackend.repository.CustomerRepository;
 import com.example.shoppingbackend.repository.OrderRepository;
 import com.example.shoppingbackend.repository.ProductRepository;
@@ -110,12 +112,37 @@ class OrderServiceTest {
     }
 
     @Test
-    void should_throw_another_exception_when_customer_id_id_invalid() {
+    void should_throw_another_exception_when_customer_id_is_invalid() {
         // given
         when(customerRepository.findById(1L)).thenThrow(new CustomerNotFoundException("not found"));
         // then
         assertThrows(CustomerNotFoundException.class, () -> orderService.findAllOrderByCustomerId(1L));
     }
 
+    @Test
+    void should_return_the_correct_order_response_by_id() {
+        // given
+        Order order = new Order();
+        Product product = new Product("bike", 130, ProductStatus.VALID);
+        OrderItem orderItem = new OrderItem(product, 3);
+        order.setOrderItems(List.of(orderItem));
+        Customer customer = new Customer("Jane");
+        customer.setOrders(List.of(order));
 
+        when(orderRepository.findById(any())).thenReturn(Optional.of(order));
+
+        // when
+        OrderDetails response = orderService.findOrderByOrderId(2L);
+
+        // then
+        assertEquals(390, response.getTotalPrice());
+    }
+
+    @Test
+    void should_throw_exception_when_order_id_is_invalid() {
+        // given
+        when(orderRepository.findById(1L)).thenThrow(new OrderNotFoundException("not found"));
+        // then
+        assertThrows(OrderNotFoundException.class, () -> orderService.findOrderByOrderId(1L));
+    }
 }

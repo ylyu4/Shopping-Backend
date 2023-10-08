@@ -3,6 +3,7 @@ package com.example.shoppingbackend.controller;
 
 import com.example.shoppingbackend.model.request.CreateOrderRequest;
 import com.example.shoppingbackend.model.response.CustomerOrdersResponse;
+import com.example.shoppingbackend.model.response.OrderDetails;
 import com.example.shoppingbackend.service.OrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,8 +30,13 @@ public class OrderController {
         orderService.createOrder(createOrderRequest);
     }
 
-    @GetMapping("/{id}")
-    public CustomerOrdersResponse getAllOrdersByCustomerId(@PathVariable Long id) {
-        return orderService.findAllOrderByCustomerId(id);
+    @GetMapping("/{userId}")
+    public CustomerOrdersResponse getAllOrdersByCustomerId(@PathVariable Long userId) {
+        return orderService.findAllOrderByCustomerId(userId);
+    }
+
+    @GetMapping("/detail/{orderId}")
+    public OrderDetails getOrderDetailByOrderId(@PathVariable Long orderId) {
+        return orderService.findOrderByOrderId(orderId);
     }
 }
