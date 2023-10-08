@@ -6,9 +6,12 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
@@ -31,6 +34,10 @@ public class Order {
     @Column(name = "order_status")
     private OrderStatus orderStatus;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
+
     public Long getId() {
         return id;
     }
@@ -39,8 +46,16 @@ public class Order {
         return orderItems;
     }
 
+    public void setOrderItems(List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
+    }
+
     public OrderStatus getOrderStatus() {
         return orderStatus;
+    }
+
+    public Customer getCustomer() {
+        return customer;
     }
 
     public void addOrderItem(Product product, int quantity) {
@@ -48,10 +63,11 @@ public class Order {
         orderItems.add(orderItem);
     }
 
-    public Order() {
+    public Order(Customer customer) {
+        this.customer = customer;
+        this.orderStatus = OrderStatus.CREATED;
     }
 
-    public void create() {
-        this.orderStatus = OrderStatus.CREATED;
+    public Order(){
     }
 }

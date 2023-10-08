@@ -1,7 +1,10 @@
 package com.example.shoppingbackend.controller;
 
+import com.example.shoppingbackend.constant.OrderStatus;
+import com.example.shoppingbackend.exception.CustomerNotFoundException;
 import com.example.shoppingbackend.exception.ProductNotFoundException;
 import com.example.shoppingbackend.model.request.CreateOrderRequest;
+import com.example.shoppingbackend.model.response.CustomerOrdersResponse;
 import com.example.shoppingbackend.service.OrderService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,10 +19,14 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
+import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(OrderController.class)
@@ -45,6 +52,7 @@ public class OrderControllerTest {
         orderItemRequest.setQuantity(2);
 
         createOrderRequest = new CreateOrderRequest();
+        createOrderRequest.setCustomerId(1L);
         createOrderRequest.setOrderItemRequestList(List.of(orderItemRequest));
     }
 
@@ -68,5 +76,30 @@ public class OrderControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(request.write(createOrderRequest).getJson()))
                         .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void should_return_the_correct_order_response() throws Exception {
+
+        CustomerOrdersResponse.OrderProductDetails orderProductDetails = new CustomerOrdersResponse.OrderProductDetails("bike", 3, 35);
+        CustomerOrdersResponse.OrderDetails orderDetails = new CustomerOrdersResponse.OrderDetails(List.of(orderProductDetails), 105, OrderStatus.CREATED);
+        CustomerOrdersResponse response = new CustomerOrdersResponse(List.of(orderDetails));
+
+        doReturn(response).when(orderService).findAllOrderByCustomerId(1L);
+        mockMvc.perform(get("/order/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.orders.[0].totalPrice", is(105)))
+                .andExpect(jsonPath("$.orders.[0].orderStatus", is("CREATED")));
+    }
+
+    @Test
+    void should_throw_customer_not_found_exception() throws Exception {
+
+        doThrow(new CustomerNotFoundException("not found")).when(orderService).findAllOrderByCustomerId(1L);
+
+        mockMvc.perform(get("/order/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
     }
 }

@@ -20,7 +20,7 @@ public class Product {
 
     private String name;
 
-    private String price;
+    private Integer price;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "product_status")
@@ -34,7 +34,7 @@ public class Product {
         return name;
     }
 
-    public String getPrice() {
+    public Integer getPrice() {
         return price;
     }
 
@@ -46,13 +46,13 @@ public class Product {
 
     }
 
-    public Product(String name, String price, ProductStatus productStatus) {
+    public Product(String name, Integer price, ProductStatus productStatus) {
         this.name = name;
         this.price = price;
         this.productStatus = productStatus;
     }
 
-    public Product(Long id, String name, String price, ProductStatus productStatus) {
+    public Product(Long id, String name, Integer price, ProductStatus productStatus) {
         this.id = id;
         this.name = name;
         this.price = price;

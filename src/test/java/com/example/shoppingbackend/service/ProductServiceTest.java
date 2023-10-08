@@ -27,10 +27,10 @@ class ProductServiceTest {
     @Test
     void should_get_the_product_list_correctly() {
         // given
-        List<Product> list = List.of(new Product(1L, "product1", "10", ProductStatus.VALID),
-                new Product(2L, "product2", "20", ProductStatus.VALID),
+        List<Product> list = List.of(new Product(1L, "product1", 10, ProductStatus.VALID),
+                new Product(2L, "product2", 20, ProductStatus.VALID),
                 new Product(3L, "product3", null, ProductStatus.VALID),
-                new Product(4L, "product4", "10", ProductStatus.INVALID));
+                new Product(4L, "product4", 10, ProductStatus.INVALID));
 
         when(productRepository.findAll()).thenReturn(list);
 

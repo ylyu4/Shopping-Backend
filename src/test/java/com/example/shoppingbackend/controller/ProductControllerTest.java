@@ -37,7 +37,7 @@ public class ProductControllerTest {
     @Test
     void should_get_all_product_list_successfully() throws Exception {
 
-        doReturn(List.of(new Product(1L, "product1", "10", ProductStatus.VALID))).when(productService).getAllProduct();
+        doReturn(List.of(new Product(1L, "product1", 10, ProductStatus.VALID))).when(productService).getAllProduct();
 
         mockMvc.perform(get("/product/list")
                         .contentType(MediaType.APPLICATION_JSON))
