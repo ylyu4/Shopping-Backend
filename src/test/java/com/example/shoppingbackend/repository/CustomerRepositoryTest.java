@@ -1,8 +1,8 @@
 package com.example.shoppingbackend.repository;
 
-import com.example.shoppingbackend.model.Customer;
+import com.example.shoppingbackend.application.port.out.CustomerRepository;
+import com.example.shoppingbackend.domain.Customer;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureTestEntityManager;

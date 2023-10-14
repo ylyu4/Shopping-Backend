@@ -1,6 +1,6 @@
-package com.example.shoppingbackend.repository;
+package com.example.shoppingbackend.application.port.out;
 
-import com.example.shoppingbackend.model.Order;
+import com.example.shoppingbackend.domain.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

@@ -1,13 +1,14 @@
 package com.example.shoppingbackend.controller;
 
+import com.example.shoppingbackend.adapter.in.OrderController;
 import com.example.shoppingbackend.constant.OrderStatus;
 import com.example.shoppingbackend.exception.CustomerNotFoundException;
 import com.example.shoppingbackend.exception.OrderNotFoundException;
 import com.example.shoppingbackend.exception.ProductNotFoundException;
-import com.example.shoppingbackend.model.request.CreateOrderRequest;
-import com.example.shoppingbackend.model.response.CustomerOrdersResponse;
-import com.example.shoppingbackend.model.response.OrderDetails;
-import com.example.shoppingbackend.service.OrderService;
+import com.example.shoppingbackend.application.port.in.command.CreateOrderCommand;
+import com.example.shoppingbackend.application.port.out.response.CustomerOrdersResponse;
+import com.example.shoppingbackend.application.port.out.response.OrderDetailsResponse;
+import com.example.shoppingbackend.application.service.OrderService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,29 +44,29 @@ public class OrderControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private JacksonTester<CreateOrderRequest> request;
+    private JacksonTester<CreateOrderCommand> request;
 
-    CreateOrderRequest createOrderRequest;
+    CreateOrderCommand createOrderCommand;
 
     @BeforeEach
     void init() {
-        CreateOrderRequest.OrderItemRequest orderItemRequest = new CreateOrderRequest.OrderItemRequest();
+        CreateOrderCommand.OrderItemRequest orderItemRequest = new CreateOrderCommand.OrderItemRequest();
         orderItemRequest.setId(1L);
         orderItemRequest.setQuantity(2);
 
-        createOrderRequest = new CreateOrderRequest();
-        createOrderRequest.setCustomerId(1L);
-        createOrderRequest.setOrderItemRequestList(List.of(orderItemRequest));
+        createOrderCommand = new CreateOrderCommand();
+        createOrderCommand.setCustomerId(1L);
+        createOrderCommand.setOrderItemRequestList(List.of(orderItemRequest));
     }
 
     @Test
     void should_create_order_successfully() throws Exception {
 
-        doNothing().when(orderService).createOrder(createOrderRequest);
+        doNothing().when(orderService).createOrder(createOrderCommand);
 
         mockMvc.perform(post("/order")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(request.write(createOrderRequest).getJson()))
+                        .content(request.write(createOrderCommand).getJson()))
                         .andExpect(status().isCreated());
     }
 
@@ -76,16 +77,16 @@ public class OrderControllerTest {
 
         mockMvc.perform(post("/order")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(request.write(createOrderRequest).getJson()))
+                        .content(request.write(createOrderCommand).getJson()))
                         .andExpect(status().isNotFound());
     }
 
     @Test
     void should_return_the_correct_order_response() throws Exception {
 
-        OrderDetails.OrderProductDetails orderProductDetails = new OrderDetails.OrderProductDetails("bike", 3, 35);
-        OrderDetails orderDetails = new OrderDetails(List.of(orderProductDetails), 105, OrderStatus.CREATED);
-        CustomerOrdersResponse response = new CustomerOrdersResponse(List.of(orderDetails));
+        OrderDetailsResponse.OrderProductDetails orderProductDetails = new OrderDetailsResponse.OrderProductDetails("bike", 3, 35);
+        OrderDetailsResponse orderDetailsResponse = new OrderDetailsResponse(List.of(orderProductDetails), 105, OrderStatus.CREATED);
+        CustomerOrdersResponse response = new CustomerOrdersResponse(List.of(orderDetailsResponse));
 
         doReturn(response).when(orderService).findAllOrderByCustomerId(1L);
         mockMvc.perform(get("/order/{userId}", 1L)
@@ -108,10 +109,10 @@ public class OrderControllerTest {
     @Test
     void should_return_the_correct_order_response_by_order_id() throws Exception {
 
-        OrderDetails.OrderProductDetails orderProductDetails = new OrderDetails.OrderProductDetails("bike", 3, 35);
-        OrderDetails orderDetails = new OrderDetails(List.of(orderProductDetails), 105, OrderStatus.CREATED);
+        OrderDetailsResponse.OrderProductDetails orderProductDetails = new OrderDetailsResponse.OrderProductDetails("bike", 3, 35);
+        OrderDetailsResponse orderDetailsResponse = new OrderDetailsResponse(List.of(orderProductDetails), 105, OrderStatus.CREATED);
 
-        doReturn(orderDetails).when(orderService).findOrderByOrderId(1L);
+        doReturn(orderDetailsResponse).when(orderService).findOrderByOrderId(1L);
         mockMvc.perform(get("/order/detail/{orderId}", 1L)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())

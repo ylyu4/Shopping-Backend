@@ -1,4 +1,4 @@
-package com.example.shoppingbackend.model;
+package com.example.shoppingbackend.domain;
 
 import com.example.shoppingbackend.constant.ProductStatus;
 import jakarta.persistence.Column;

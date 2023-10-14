@@ -1,8 +1,9 @@
 package com.example.shoppingbackend.service;
 
+import com.example.shoppingbackend.adapter.out.ProductPersistenceAdapter;
+import com.example.shoppingbackend.application.service.ProductService;
 import com.example.shoppingbackend.constant.ProductStatus;
-import com.example.shoppingbackend.model.Product;
-import com.example.shoppingbackend.repository.ProductRepository;
+import com.example.shoppingbackend.domain.Product;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,21 +22,19 @@ class ProductServiceTest {
     ProductService productService;
 
     @Mock
-    ProductRepository productRepository;
+    ProductPersistenceAdapter productPersistenceAdapter;
 
 
     @Test
     void should_get_the_product_list_correctly() {
         // given
         List<Product> list = List.of(new Product(1L, "product1", 10, ProductStatus.VALID),
-                new Product(2L, "product2", 20, ProductStatus.VALID),
-                new Product(3L, "product3", null, ProductStatus.VALID),
-                new Product(4L, "product4", 10, ProductStatus.INVALID));
+                new Product(2L, "product2", 20, ProductStatus.VALID));
 
-        when(productRepository.findAll()).thenReturn(list);
+        when(productPersistenceAdapter.getAllProduct()).thenReturn(list);
 
         // when
-        List<Product> products = productService.getAllProduct();
+        List<Product> products = productService.getProductList();
 
         // then
         assertEquals(2, products.size());

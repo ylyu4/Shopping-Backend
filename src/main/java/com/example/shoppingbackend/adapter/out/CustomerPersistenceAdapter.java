@@ -1,19 +1,19 @@
-package com.example.shoppingbackend.service;
+package com.example.shoppingbackend.adapter.out;
 
+import com.example.shoppingbackend.application.port.out.CustomerRepository;
+import com.example.shoppingbackend.domain.Customer;
 import com.example.shoppingbackend.exception.CustomerNotFoundException;
-import com.example.shoppingbackend.model.Customer;
-import com.example.shoppingbackend.repository.CustomerRepository;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
-public class CustomerService {
+@Component
+public class CustomerPersistenceAdapter {
 
     private final CustomerRepository customerRepository;
 
-    public CustomerService(CustomerRepository customerRepository) {
+
+    public CustomerPersistenceAdapter(CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
     }
-
 
     public Customer getCustomerById(Long id) {
         return customerRepository.findById(id).orElseThrow(() ->

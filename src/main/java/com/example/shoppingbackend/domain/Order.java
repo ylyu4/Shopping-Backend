@@ -1,4 +1,4 @@
-package com.example.shoppingbackend.model;
+package com.example.shoppingbackend.domain;
 
 import com.example.shoppingbackend.constant.OrderStatus;
 import jakarta.persistence.CascadeType;

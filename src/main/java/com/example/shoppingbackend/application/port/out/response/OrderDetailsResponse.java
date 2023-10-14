@@ -1,10 +1,10 @@
-package com.example.shoppingbackend.model.response;
+package com.example.shoppingbackend.application.port.out.response;
 
 import com.example.shoppingbackend.constant.OrderStatus;
 
 import java.util.List;
 
-public class OrderDetails {
+public class OrderDetailsResponse {
 
     private List<OrderProductDetails> orderProducts;
 
@@ -24,7 +24,7 @@ public class OrderDetails {
         return orderStatus;
     }
 
-    public OrderDetails(List<OrderProductDetails> orderProducts, Integer totalPrice, OrderStatus orderStatus) {
+    public OrderDetailsResponse(List<OrderProductDetails> orderProducts, Integer totalPrice, OrderStatus orderStatus) {
         this.orderProducts = orderProducts;
         this.totalPrice = totalPrice;
         this.orderStatus = orderStatus;

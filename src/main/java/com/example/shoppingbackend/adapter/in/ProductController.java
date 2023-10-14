@@ -1,7 +1,7 @@
-package com.example.shoppingbackend.controller;
+package com.example.shoppingbackend.adapter.in;
 
-import com.example.shoppingbackend.model.Product;
-import com.example.shoppingbackend.service.ProductService;
+import com.example.shoppingbackend.domain.Product;
+import com.example.shoppingbackend.application.service.ProductService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +20,6 @@ public class ProductController {
 
     @GetMapping("/list")
     public List<Product> getProductList() {
-        return productService.getAllProduct();
+        return productService.getProductList();
     }
 }

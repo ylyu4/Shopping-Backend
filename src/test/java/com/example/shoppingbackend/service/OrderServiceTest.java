@@ -1,19 +1,20 @@
 package com.example.shoppingbackend.service;
 
+import com.example.shoppingbackend.adapter.out.CustomerPersistenceAdapter;
+import com.example.shoppingbackend.adapter.out.OrderPersistenceAdapter;
+import com.example.shoppingbackend.adapter.out.ProductPersistenceAdapter;
+import com.example.shoppingbackend.application.service.OrderService;
 import com.example.shoppingbackend.constant.ProductStatus;
 import com.example.shoppingbackend.exception.CustomerNotFoundException;
 import com.example.shoppingbackend.exception.OrderNotFoundException;
 import com.example.shoppingbackend.exception.ProductNotFoundException;
-import com.example.shoppingbackend.model.Customer;
-import com.example.shoppingbackend.model.Order;
-import com.example.shoppingbackend.model.OrderItem;
-import com.example.shoppingbackend.model.Product;
-import com.example.shoppingbackend.model.request.CreateOrderRequest;
-import com.example.shoppingbackend.model.response.CustomerOrdersResponse;
-import com.example.shoppingbackend.model.response.OrderDetails;
-import com.example.shoppingbackend.repository.CustomerRepository;
-import com.example.shoppingbackend.repository.OrderRepository;
-import com.example.shoppingbackend.repository.ProductRepository;
+import com.example.shoppingbackend.domain.Customer;
+import com.example.shoppingbackend.domain.Order;
+import com.example.shoppingbackend.domain.OrderItem;
+import com.example.shoppingbackend.domain.Product;
+import com.example.shoppingbackend.application.port.in.command.CreateOrderCommand;
+import com.example.shoppingbackend.application.port.out.response.CustomerOrdersResponse;
+import com.example.shoppingbackend.application.port.out.response.OrderDetailsResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -22,7 +23,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -38,23 +38,23 @@ class OrderServiceTest {
     OrderService orderService;
 
     @Mock
-    OrderRepository orderRepository;
+    OrderPersistenceAdapter orderPersistenceAdapter;
 
     @Mock
-    ProductRepository productRepository;
+    ProductPersistenceAdapter productPersistenceAdapter;
 
     @Mock
-    CustomerRepository customerRepository;
+    CustomerPersistenceAdapter customerPersistenceAdapter;
 
-    CreateOrderRequest request;
+    CreateOrderCommand request;
 
     @BeforeEach
     void init() {
-        CreateOrderRequest.OrderItemRequest orderItemRequest = new CreateOrderRequest.OrderItemRequest();
+        CreateOrderCommand.OrderItemRequest orderItemRequest = new CreateOrderCommand.OrderItemRequest();
         orderItemRequest.setId(1L);
         orderItemRequest.setQuantity(2);
 
-        request = new CreateOrderRequest();
+        request = new CreateOrderCommand();
         request.setCustomerId(1L);
         request.setOrderItemRequestList(List.of(orderItemRequest));
     }
@@ -63,21 +63,21 @@ class OrderServiceTest {
     @Test
     void should_create_order_successfully() {
         // given
-        when(customerRepository.findById(1L)).thenReturn(Optional.of(new Customer()));
-        when(productRepository.findById(1L)).thenReturn(Optional.of(new Product()));
+        when(customerPersistenceAdapter.getCustomerById(1L)).thenReturn(new Customer());
+        when(productPersistenceAdapter.getProductById(1L)).thenReturn(new Product());
 
         // when
         orderService.createOrder(request);
 
         // then
-        verify(orderRepository, times(1)).save(any());
+        verify(orderPersistenceAdapter, times(1)).saveOrder(any());
     }
 
     @Test
     void should_throw_exception_when_request_id_is_invalid() {
         // given
-        when(customerRepository.findById(1L)).thenReturn(Optional.of(new Customer()));
-        when(productRepository.findById(1L)).thenThrow(new ProductNotFoundException("Can not find product for this id: 1L"));
+        when(customerPersistenceAdapter.getCustomerById(1L)).thenReturn(new Customer());
+        when(productPersistenceAdapter.getProductById(1L)).thenThrow(new ProductNotFoundException("Can not find product for this id: 1L"));
 
         // then
         assertThrows(ProductNotFoundException.class, () -> orderService.createOrder(request));
@@ -86,7 +86,7 @@ class OrderServiceTest {
     @Test
     void should_throw_exception_when_customer_id_id_invalid() {
         // given
-        when(customerRepository.findById(1L)).thenThrow(new CustomerNotFoundException("not found"));
+        when(customerPersistenceAdapter.getCustomerById(1L)).thenThrow(new CustomerNotFoundException("not found"));
         // then
         assertThrows(CustomerNotFoundException.class, () -> orderService.createOrder(request));
     }
@@ -101,7 +101,7 @@ class OrderServiceTest {
         Customer customer = new Customer("Jane");
         customer.setOrders(List.of(order));
 
-        when(customerRepository.findById(2L)).thenReturn(Optional.of(customer));
+        when(customerPersistenceAdapter.getCustomerById(2L)).thenReturn(customer);
 
         // when
         CustomerOrdersResponse response = orderService.findAllOrderByCustomerId(2L);
@@ -114,7 +114,7 @@ class OrderServiceTest {
     @Test
     void should_throw_another_exception_when_customer_id_is_invalid() {
         // given
-        when(customerRepository.findById(1L)).thenThrow(new CustomerNotFoundException("not found"));
+        when(customerPersistenceAdapter.getCustomerById(1L)).thenThrow(new CustomerNotFoundException("not found"));
         // then
         assertThrows(CustomerNotFoundException.class, () -> orderService.findAllOrderByCustomerId(1L));
     }
@@ -129,10 +129,10 @@ class OrderServiceTest {
         Customer customer = new Customer("Jane");
         customer.setOrders(List.of(order));
 
-        when(orderRepository.findById(any())).thenReturn(Optional.of(order));
+        when(orderPersistenceAdapter.getOrderById(any())).thenReturn(order);
 
         // when
-        OrderDetails response = orderService.findOrderByOrderId(2L);
+        OrderDetailsResponse response = orderService.findOrderByOrderId(2L);
 
         // then
         assertEquals(390, response.getTotalPrice());
@@ -141,7 +141,7 @@ class OrderServiceTest {
     @Test
     void should_throw_exception_when_order_id_is_invalid() {
         // given
-        when(orderRepository.findById(1L)).thenThrow(new OrderNotFoundException("not found"));
+        when(orderPersistenceAdapter.getOrderById(1L)).thenThrow(new OrderNotFoundException("not found"));
         // then
         assertThrows(OrderNotFoundException.class, () -> orderService.findOrderByOrderId(1L));
     }

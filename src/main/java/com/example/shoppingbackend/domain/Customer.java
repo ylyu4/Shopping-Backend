@@ -1,4 +1,4 @@
-package com.example.shoppingbackend.model;
+package com.example.shoppingbackend.domain;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;

@@ -1,8 +1,9 @@
 package com.example.shoppingbackend.controller;
 
+import com.example.shoppingbackend.adapter.in.CustomerController;
 import com.example.shoppingbackend.exception.CustomerNotFoundException;
-import com.example.shoppingbackend.model.Customer;
-import com.example.shoppingbackend.service.CustomerService;
+import com.example.shoppingbackend.domain.Customer;
+import com.example.shoppingbackend.application.service.CustomerService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
@@ -36,7 +37,7 @@ public class CustomerControllerTest {
     @Test
     void should_find_customer_profile_successfully() throws Exception {
 
-        doReturn(new Customer(1L, "Jack")).when(customerService).getCustomerById(1L);
+        doReturn(new Customer(1L, "Jack")).when(customerService).getCustomer(1L);
 
         mockMvc.perform(get("/customer/profile/{id}", 1L)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -48,7 +49,7 @@ public class CustomerControllerTest {
     @Test
     void should_throw_customer_not_found_successfully() throws Exception {
 
-        doThrow(new CustomerNotFoundException("not found")).when(customerService).getCustomerById(1L);
+        doThrow(new CustomerNotFoundException("not found")).when(customerService).getCustomer(1L);
 
         mockMvc.perform(get("/customer/profile/{id}", 1L)
                         .contentType(MediaType.APPLICATION_JSON))

@@ -1,10 +1,10 @@
-package com.example.shoppingbackend.controller;
+package com.example.shoppingbackend.adapter.in;
 
 
-import com.example.shoppingbackend.model.request.CreateOrderRequest;
-import com.example.shoppingbackend.model.response.CustomerOrdersResponse;
-import com.example.shoppingbackend.model.response.OrderDetails;
-import com.example.shoppingbackend.service.OrderService;
+import com.example.shoppingbackend.application.port.in.command.CreateOrderCommand;
+import com.example.shoppingbackend.application.port.out.response.CustomerOrdersResponse;
+import com.example.shoppingbackend.application.port.out.response.OrderDetailsResponse;
+import com.example.shoppingbackend.application.service.OrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,8 +26,8 @@ public class OrderController {
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public void createOrder(@RequestBody CreateOrderRequest createOrderRequest) {
-        orderService.createOrder(createOrderRequest);
+    public void createOrder(@RequestBody CreateOrderCommand createOrderCommand) {
+        orderService.createOrder(createOrderCommand);
     }
 
     @GetMapping("/{userId}")
@@ -36,7 +36,7 @@ public class OrderController {
     }
 
     @GetMapping("/detail/{orderId}")
-    public OrderDetails getOrderDetailByOrderId(@PathVariable Long orderId) {
+    public OrderDetailsResponse getOrderDetailByOrderId(@PathVariable Long orderId) {
         return orderService.findOrderByOrderId(orderId);
     }
 }

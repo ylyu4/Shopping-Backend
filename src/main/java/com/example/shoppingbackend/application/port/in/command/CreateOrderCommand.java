@@ -1,8 +1,8 @@
-package com.example.shoppingbackend.model.request;
+package com.example.shoppingbackend.application.port.in.command;
 
 import java.util.List;
 
-public class CreateOrderRequest {
+public class CreateOrderCommand {
 
     private Long customerId;
 

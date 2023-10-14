@@ -1,7 +1,8 @@
 package com.example.shoppingbackend.repository;
 
+import com.example.shoppingbackend.application.port.out.ProductRepository;
 import com.example.shoppingbackend.constant.ProductStatus;
-import com.example.shoppingbackend.model.Product;
+import com.example.shoppingbackend.domain.Product;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
