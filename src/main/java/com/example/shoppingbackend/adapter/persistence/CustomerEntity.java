@@ -1,6 +1,5 @@
 package com.example.shoppingbackend.adapter.persistence;
 
-import com.example.shoppingbackend.domain.Customer;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

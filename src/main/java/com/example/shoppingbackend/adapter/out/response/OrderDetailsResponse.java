@@ -30,6 +30,9 @@ public class OrderDetailsResponse {
         this.orderStatus = orderStatus;
     }
 
+    public OrderDetailsResponse() {
+    }
+
     public static class OrderProductDetails {
 
         private String name;

@@ -1,8 +1,5 @@
 package com.example.shoppingbackend.adapter.persistence;
 
-import com.example.shoppingbackend.domain.Order;
-import com.example.shoppingbackend.domain.OrderItem;
-import com.example.shoppingbackend.domain.Product;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;

@@ -9,8 +9,6 @@ import com.example.shoppingbackend.adapter.out.response.CustomerOrdersResponse;
 import com.example.shoppingbackend.adapter.out.response.OrderDetailsResponse;
 import com.example.shoppingbackend.domain.Customer;
 import com.example.shoppingbackend.domain.Order;
-import com.example.shoppingbackend.domain.OrderItem;
-import com.example.shoppingbackend.domain.Product;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

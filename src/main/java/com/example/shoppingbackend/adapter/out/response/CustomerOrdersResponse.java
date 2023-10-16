@@ -13,4 +13,7 @@ public class CustomerOrdersResponse {
     public CustomerOrdersResponse(List<OrderDetailsResponse> orders) {
         this.orders = orders;
     }
+
+    public CustomerOrdersResponse() {
+    }
 }

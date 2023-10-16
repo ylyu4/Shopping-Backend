@@ -1,7 +1,6 @@
 package com.example.shoppingbackend.adapter.persistence;
 
 import com.example.shoppingbackend.constant.OrderStatus;
-import com.example.shoppingbackend.domain.Order;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -45,10 +44,6 @@ public class OrderEntity {
 
     public List<OrderItemEntity> getOrderItems() {
         return orderItemEntities;
-    }
-
-    public void setOrderItems(List<OrderItemEntity> orderItemEntities) {
-        this.orderItemEntities = orderItemEntities;
     }
 
     public OrderStatus getOrderStatus() {

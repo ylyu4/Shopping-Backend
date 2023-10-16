@@ -1,6 +1,5 @@
 package com.example.shoppingbackend.adapter.in;
 
-
 import com.example.shoppingbackend.adapter.in.command.CreateOrderCommand;
 import com.example.shoppingbackend.adapter.out.response.CustomerOrdersResponse;
 import com.example.shoppingbackend.adapter.out.response.OrderDetailsResponse;
