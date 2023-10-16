@@ -1,14 +1,13 @@
 package com.example.shoppingbackend.adapter.in;
 
-import com.example.shoppingbackend.adapter.in.OrderController;
+import com.example.shoppingbackend.application.port.in.OrderUseCase;
 import com.example.shoppingbackend.constant.OrderStatus;
 import com.example.shoppingbackend.exception.CustomerNotFoundException;
 import com.example.shoppingbackend.exception.OrderNotFoundException;
 import com.example.shoppingbackend.exception.ProductNotFoundException;
-import com.example.shoppingbackend.application.port.in.command.CreateOrderCommand;
-import com.example.shoppingbackend.application.port.out.response.CustomerOrdersResponse;
-import com.example.shoppingbackend.application.port.out.response.OrderDetailsResponse;
-import com.example.shoppingbackend.application.service.OrderService;
+import com.example.shoppingbackend.adapter.in.command.CreateOrderCommand;
+import com.example.shoppingbackend.adapter.out.response.CustomerOrdersResponse;
+import com.example.shoppingbackend.adapter.out.response.OrderDetailsResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,10 +34,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(OrderController.class)
 @AutoConfigureMockMvc(addFilters = false)
 @AutoConfigureJsonTesters
-public class OrderControllerTest {
+public class OrderEntityControllerTest {
 
     @MockBean
-    private OrderService orderService;
+    private OrderUseCase orderUseCase;
 
     @Autowired
     private MockMvc mockMvc;
@@ -62,7 +61,7 @@ public class OrderControllerTest {
     @Test
     void should_create_order_successfully() throws Exception {
 
-        doNothing().when(orderService).createOrder(createOrderCommand);
+        doNothing().when(orderUseCase).createOrder(createOrderCommand);
 
         mockMvc.perform(post("/order")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -73,7 +72,7 @@ public class OrderControllerTest {
     @Test
     void should_throw_product_not_found_exception() throws Exception {
 
-        doThrow(new ProductNotFoundException("not found")).when(orderService).createOrder(any());
+        doThrow(new ProductNotFoundException("not found")).when(orderUseCase).createOrder(any());
 
         mockMvc.perform(post("/order")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -88,7 +87,7 @@ public class OrderControllerTest {
         OrderDetailsResponse orderDetailsResponse = new OrderDetailsResponse(List.of(orderProductDetails), 105, OrderStatus.CREATED);
         CustomerOrdersResponse response = new CustomerOrdersResponse(List.of(orderDetailsResponse));
 
-        doReturn(response).when(orderService).findAllOrderByCustomerId(1L);
+        doReturn(response).when(orderUseCase).findAllOrderByCustomerId(1L);
         mockMvc.perform(get("/order/{userId}", 1L)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -99,7 +98,7 @@ public class OrderControllerTest {
     @Test
     void should_throw_customer_not_found_exception() throws Exception {
 
-        doThrow(new CustomerNotFoundException("not found")).when(orderService).findAllOrderByCustomerId(1L);
+        doThrow(new CustomerNotFoundException("not found")).when(orderUseCase).findAllOrderByCustomerId(1L);
 
         mockMvc.perform(get("/order/{userId}", 1L)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -112,7 +111,7 @@ public class OrderControllerTest {
         OrderDetailsResponse.OrderProductDetails orderProductDetails = new OrderDetailsResponse.OrderProductDetails("bike", 3, 35);
         OrderDetailsResponse orderDetailsResponse = new OrderDetailsResponse(List.of(orderProductDetails), 105, OrderStatus.CREATED);
 
-        doReturn(orderDetailsResponse).when(orderService).findOrderByOrderId(1L);
+        doReturn(orderDetailsResponse).when(orderUseCase).findOrderByOrderId(1L);
         mockMvc.perform(get("/order/detail/{orderId}", 1L)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -123,7 +122,7 @@ public class OrderControllerTest {
     @Test
     void should_throw_order_not_found_exception() throws Exception {
 
-        doThrow(new OrderNotFoundException("not found")).when(orderService).findOrderByOrderId(1L);
+        doThrow(new OrderNotFoundException("not found")).when(orderUseCase).findOrderByOrderId(1L);
 
         mockMvc.perform(get("/order/detail/{orderId}", 1L)
                         .contentType(MediaType.APPLICATION_JSON))

@@ -1,8 +1,8 @@
 package com.example.shoppingbackend.application.port.in;
 
-import com.example.shoppingbackend.application.port.in.command.CreateOrderCommand;
-import com.example.shoppingbackend.application.port.out.response.CustomerOrdersResponse;
-import com.example.shoppingbackend.application.port.out.response.OrderDetailsResponse;
+import com.example.shoppingbackend.adapter.in.command.CreateOrderCommand;
+import com.example.shoppingbackend.adapter.out.response.CustomerOrdersResponse;
+import com.example.shoppingbackend.adapter.out.response.OrderDetailsResponse;
 
 public interface OrderUseCase {
 

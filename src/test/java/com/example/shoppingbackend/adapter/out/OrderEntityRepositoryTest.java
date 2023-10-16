@@ -1,10 +1,9 @@
-package com.example.shoppingbackend.application.port;
+package com.example.shoppingbackend.adapter.out;
 
-import com.example.shoppingbackend.application.port.out.OrderRepository;
 import com.example.shoppingbackend.constant.ProductStatus;
-import com.example.shoppingbackend.domain.Customer;
-import com.example.shoppingbackend.domain.Order;
-import com.example.shoppingbackend.domain.Product;
+import com.example.shoppingbackend.adapter.persistence.CustomerEntity;
+import com.example.shoppingbackend.adapter.persistence.OrderEntity;
+import com.example.shoppingbackend.adapter.persistence.ProductEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -25,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Rollback
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @AutoConfigureTestEntityManager
-public class OrderRepositoryTest {
+public class OrderEntityRepositoryTest {
 
     @Autowired
     TestEntityManager entityManager;
@@ -36,38 +35,40 @@ public class OrderRepositoryTest {
     @Test
     void should_save_order_successfully() {
         // given
-        Customer customer = new Customer("customer");
-        Product product = new Product("test1", 20, ProductStatus.VALID);
-        Order order = new Order(customer);
+        Integer originalSize = orderRepository.findAll().size();
+        CustomerEntity customer = new CustomerEntity("customer");
+        ProductEntity product = new ProductEntity("test1", 20, ProductStatus.VALID);
+        OrderEntity order = new OrderEntity(customer);
         order.addOrderItem(product, 10);
         entityManager.persistAndFlush(customer);
         entityManager.persistAndFlush(product);
         orderRepository.save(order);
 
         // when
-        List<Order> all = orderRepository.findAll();
+        List<OrderEntity> all = orderRepository.findAll();
 
         // then
-        assertEquals(1, all.size());
-        assertEquals(customer, all.get(0).getCustomer());
-        assertEquals(product, all.get(0).getOrderItems().get(0).getProduct());
+        Integer totalSize = 1 + originalSize;
+        assertEquals(totalSize, all.size());
+        assertEquals(customer, all.get(totalSize - 1).getCustomer());
+        assertEquals(product, all.get(totalSize - 1).getOrderItems().get(0).getProduct());
     }
 
     @Test
     void should_get_order_by_id_successfully() {
         // given
-        Customer customer = new Customer("customer");
-        Product product = new Product("test1", 20, ProductStatus.VALID);
-        Order order = new Order(customer);
+        CustomerEntity customer = new CustomerEntity("customer");
+        ProductEntity product = new ProductEntity("test1", 20, ProductStatus.VALID);
+        OrderEntity order = new OrderEntity(customer);
         order.addOrderItem(product, 10);
         entityManager.persistAndFlush(customer);
         entityManager.persistAndFlush(product);
         entityManager.persistAndFlush(order);
 
         // when
-        List<Order> all = orderRepository.findAll();
+        List<OrderEntity> all = orderRepository.findAll();
         Long id = all.get(all.size() - 1).getId();
-        Optional<Order> optionalOrder = orderRepository.findById(id);
+        Optional<OrderEntity> optionalOrder = orderRepository.findById(id);
 
         // then
         assertTrue(optionalOrder.isPresent());

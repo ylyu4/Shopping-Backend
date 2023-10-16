@@ -1,6 +1,6 @@
 package com.example.shoppingbackend.adapter.out;
 
-import com.example.shoppingbackend.application.port.out.CustomerRepository;
+import com.example.shoppingbackend.adapter.persistence.CustomerEntity;
 import com.example.shoppingbackend.domain.Customer;
 import com.example.shoppingbackend.exception.CustomerNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class CustomerPersistenceAdapterTest {
+class CustomerEntityPersistenceAdapterTest {
 
     @InjectMocks
     CustomerPersistenceAdapter customerPersistenceAdapter;
@@ -24,12 +24,12 @@ class CustomerPersistenceAdapterTest {
     @Mock
     CustomerRepository customerRepository;
 
-    Customer customer;
+    CustomerEntity customer;
 
 
     @BeforeEach
     void setUp() {
-        customer = new Customer(1L, "customer1");
+        customer = new CustomerEntity(1L, "customer1");
     }
 
     @Test
@@ -41,7 +41,7 @@ class CustomerPersistenceAdapterTest {
         Customer response = customerPersistenceAdapter.getCustomerById(1L);
 
         // then
-        assertEquals(customer, response);
+        assertEquals(customer.getName(), response.getName());
     }
 
     @Test

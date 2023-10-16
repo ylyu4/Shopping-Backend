@@ -1,8 +1,6 @@
-package com.example.shoppingbackend.application.port;
+package com.example.shoppingbackend.adapter.out;
 
-import com.example.shoppingbackend.application.port.out.ProductRepository;
-import com.example.shoppingbackend.constant.ProductStatus;
-import com.example.shoppingbackend.domain.Product;
+import com.example.shoppingbackend.adapter.persistence.CustomerEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -13,34 +11,38 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.Rollback;
 
 import java.util.List;
+import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @DataJpaTest
 @Rollback
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 @AutoConfigureTestEntityManager
-public class ProductRepositoryTest {
+class CustomerEntityRepositoryTest {
 
     @Autowired
     TestEntityManager entityManager;
 
     @Autowired
-    ProductRepository productRepository;
+    CustomerRepository customerRepository;
+
 
     @Test
-    void should_find_all_products_from_database_successfully() {
+    void should_get_customer_from_database_successfully() {
         // given
-        Product product = new Product("test1", 20, ProductStatus.VALID);
-        entityManager.persistAndFlush(product);
+        CustomerEntity customer = new CustomerEntity("customer");
+        entityManager.persistAndFlush(customer);
 
         // when
-        List<Product> all = productRepository.findAll();
+        List<CustomerEntity> all = customerRepository.findAll();
+        Long id = all.get(all.size() - 1).getId();
+        Optional<CustomerEntity> optionalCustomer = customerRepository.findById(id);
 
         // then
-        assertEquals(5, all.size());
-        assertEquals("test1", all.get(all.size() - 1).getName());
+        assertTrue(optionalCustomer.isPresent());
+        assertEquals("customer", optionalCustomer.get().getName());
     }
 
 }

@@ -1,8 +1,8 @@
 package com.example.shoppingbackend.application.service;
 
 
-import com.example.shoppingbackend.adapter.out.ProductPersistenceAdapter;
 import com.example.shoppingbackend.application.port.in.ProductUseCase;
+import com.example.shoppingbackend.application.port.out.ProductPort;
 import com.example.shoppingbackend.domain.Product;
 import org.springframework.stereotype.Service;
 
@@ -11,14 +11,14 @@ import java.util.List;
 @Service
 public class ProductService implements ProductUseCase {
 
-    private final ProductPersistenceAdapter productPersistenceAdapter;
+    private final ProductPort productPort;
 
-    public ProductService(ProductPersistenceAdapter productPersistenceAdapter) {
-        this.productPersistenceAdapter = productPersistenceAdapter;
+    public ProductService(ProductPort productPort) {
+        this.productPort = productPort;
     }
 
     public List<Product> getProductList() {
-        return productPersistenceAdapter.getAllProduct();
+        return productPort.getAllProduct();
     }
 
 }

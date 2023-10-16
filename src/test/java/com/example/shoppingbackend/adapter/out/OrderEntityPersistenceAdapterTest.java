@@ -1,6 +1,6 @@
 package com.example.shoppingbackend.adapter.out;
 
-import com.example.shoppingbackend.application.port.out.OrderRepository;
+import com.example.shoppingbackend.adapter.persistence.OrderEntity;
 import com.example.shoppingbackend.domain.Order;
 import com.example.shoppingbackend.exception.OrderNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +17,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class OrderPersistenceAdapterTest {
+class OrderEntityPersistenceAdapterTest {
 
     @InjectMocks
     OrderPersistenceAdapter orderPersistenceAdapter;
@@ -25,12 +25,12 @@ class OrderPersistenceAdapterTest {
     @Mock
     OrderRepository orderRepository;
 
-    Order order;
+    OrderEntity order;
 
 
     @BeforeEach
     void setUp() {
-        order = new Order();
+        order = new OrderEntity();
     }
 
     @Test
@@ -42,7 +42,7 @@ class OrderPersistenceAdapterTest {
         Order resp = orderPersistenceAdapter.getOrderById(1L);
 
         //then
-        assertEquals(order, resp);
+        assertEquals(order.getId(), resp.getId());
     }
 
     @Test

@@ -1,4 +1,4 @@
-package com.example.shoppingbackend.application.port.in.command;
+package com.example.shoppingbackend.adapter.in.command;
 
 import java.util.List;
 

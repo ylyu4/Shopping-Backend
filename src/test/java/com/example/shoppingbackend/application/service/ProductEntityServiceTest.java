@@ -1,7 +1,6 @@
 package com.example.shoppingbackend.application.service;
 
-import com.example.shoppingbackend.adapter.out.ProductPersistenceAdapter;
-import com.example.shoppingbackend.application.service.ProductService;
+import com.example.shoppingbackend.application.port.out.ProductPort;
 import com.example.shoppingbackend.constant.ProductStatus;
 import com.example.shoppingbackend.domain.Product;
 import org.junit.jupiter.api.Test;
@@ -16,13 +15,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class ProductServiceTest {
+class ProductEntityServiceTest {
 
     @InjectMocks
     ProductService productService;
 
     @Mock
-    ProductPersistenceAdapter productPersistenceAdapter;
+    ProductPort productPort;
 
 
     @Test
@@ -31,7 +30,7 @@ class ProductServiceTest {
         List<Product> list = List.of(new Product(1L, "product1", 10, ProductStatus.VALID),
                 new Product(2L, "product2", 20, ProductStatus.VALID));
 
-        when(productPersistenceAdapter.getAllProduct()).thenReturn(list);
+        when(productPort.getAllProduct()).thenReturn(list);
 
         // when
         List<Product> products = productService.getProductList();
