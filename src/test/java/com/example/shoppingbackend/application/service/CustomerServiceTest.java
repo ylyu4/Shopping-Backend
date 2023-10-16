@@ -1,4 +1,4 @@
-package com.example.shoppingbackend.service;
+package com.example.shoppingbackend.application.service;
 
 import com.example.shoppingbackend.adapter.out.CustomerPersistenceAdapter;
 import com.example.shoppingbackend.application.service.CustomerService;

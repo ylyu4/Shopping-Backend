@@ -1,4 +1,4 @@
-package com.example.shoppingbackend.controller;
+package com.example.shoppingbackend.adapter.in;
 
 import com.example.shoppingbackend.adapter.in.OrderController;
 import com.example.shoppingbackend.constant.OrderStatus;

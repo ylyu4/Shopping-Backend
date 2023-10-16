@@ -1,4 +1,4 @@
-package com.example.shoppingbackend.controller;
+package com.example.shoppingbackend.adapter.in;
 
 import com.example.shoppingbackend.adapter.in.CustomerController;
 import com.example.shoppingbackend.exception.CustomerNotFoundException;

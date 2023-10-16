@@ -1,4 +1,4 @@
-package com.example.shoppingbackend.repository;
+package com.example.shoppingbackend.application.port;
 
 import com.example.shoppingbackend.application.port.out.ProductRepository;
 import com.example.shoppingbackend.constant.ProductStatus;
