@@ -1,6 +1,6 @@
 package com.example.shoppingbackend.application.service;
 
-import com.example.shoppingbackend.application.port.out.ProductPort;
+import com.example.shoppingbackend.application.port.out.GetProductListPort;
 import com.example.shoppingbackend.constant.ProductStatus;
 import com.example.shoppingbackend.domain.Product;
 import org.junit.jupiter.api.Test;
@@ -15,13 +15,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class ProductEntityServiceTest {
+class ProductUseCaseTest {
 
     @InjectMocks
     ProductService productService;
 
     @Mock
-    ProductPort productPort;
+    GetProductListPort getProductListPort;
 
 
     @Test
@@ -30,7 +30,7 @@ class ProductEntityServiceTest {
         List<Product> list = List.of(new Product(1L, "product1", 10, ProductStatus.VALID),
                 new Product(2L, "product2", 20, ProductStatus.VALID));
 
-        when(productPort.getAllProduct()).thenReturn(list);
+        when(getProductListPort.getAllProduct()).thenReturn(list);
 
         // when
         List<Product> products = productService.getProductList();

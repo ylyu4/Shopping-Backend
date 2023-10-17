@@ -1,6 +1,6 @@
 package com.example.shoppingbackend.adapter.in;
 
-import com.example.shoppingbackend.application.port.in.ProductUseCase;
+import com.example.shoppingbackend.application.port.in.GetProductListUseCase;
 import com.example.shoppingbackend.domain.Product;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,14 +12,14 @@ import java.util.List;
 @RequestMapping("/product")
 public class ProductController {
 
-    private final ProductUseCase productUseCase;
+    private final GetProductListUseCase getProductListUseCase;
 
-    public ProductController(ProductUseCase productUseCase) {
-        this.productUseCase = productUseCase;
+    public ProductController(GetProductListUseCase getProductListUseCase) {
+        this.getProductListUseCase = getProductListUseCase;
     }
 
     @GetMapping("/list")
     public List<Product> getProductList() {
-        return productUseCase.getProductList();
+        return getProductListUseCase.getProductList();
     }
 }

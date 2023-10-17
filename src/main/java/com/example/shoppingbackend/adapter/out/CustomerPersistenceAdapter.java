@@ -1,12 +1,12 @@
 package com.example.shoppingbackend.adapter.out;
 
-import com.example.shoppingbackend.application.port.out.CustomerPort;
+import com.example.shoppingbackend.application.port.out.GetCustomerProfilePort;
 import com.example.shoppingbackend.domain.Customer;
 import com.example.shoppingbackend.exception.CustomerNotFoundException;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CustomerPersistenceAdapter implements CustomerPort {
+public class CustomerPersistenceAdapter implements GetCustomerProfilePort {
 
     private final CustomerRepository customerRepository;
 

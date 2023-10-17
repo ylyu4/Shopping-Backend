@@ -3,7 +3,9 @@ package com.example.shoppingbackend.adapter.in;
 import com.example.shoppingbackend.adapter.in.command.CreateOrderCommand;
 import com.example.shoppingbackend.adapter.out.response.CustomerOrdersResponse;
 import com.example.shoppingbackend.adapter.out.response.OrderDetailsResponse;
-import com.example.shoppingbackend.application.port.in.OrderUseCase;
+import com.example.shoppingbackend.application.port.in.CreateOrderUseCase;
+import com.example.shoppingbackend.application.port.in.GetAllOrdersUseCase;
+import com.example.shoppingbackend.application.port.in.GetOrderDetailUseCase;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,25 +19,31 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/order")
 public class OrderController {
 
-    private final OrderUseCase orderUseCase;
+    private final GetAllOrdersUseCase getAllOrdersUseCase;
 
-    public OrderController(OrderUseCase orderUseCase) {
-        this.orderUseCase = orderUseCase;
+    private final GetOrderDetailUseCase getOrderDetailUseCase;
+
+    private final CreateOrderUseCase createOrderUseCase;
+
+    public OrderController(GetAllOrdersUseCase getAllOrdersUseCase, GetOrderDetailUseCase getOrderDetailUseCase, CreateOrderUseCase createOrderUseCase) {
+        this.getAllOrdersUseCase = getAllOrdersUseCase;
+        this.getOrderDetailUseCase = getOrderDetailUseCase;
+        this.createOrderUseCase = createOrderUseCase;
     }
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
     public void createOrder(@RequestBody CreateOrderCommand createOrderCommand) {
-        orderUseCase.createOrder(createOrderCommand);
+        createOrderUseCase.createOrder(createOrderCommand);
     }
 
     @GetMapping("/{userId}")
     public CustomerOrdersResponse getAllOrdersByCustomerId(@PathVariable Long userId) {
-        return orderUseCase.findAllOrderByCustomerId(userId);
+        return getAllOrdersUseCase.findAllOrdersByCustomerId(userId);
     }
 
     @GetMapping("/detail/{orderId}")
     public OrderDetailsResponse getOrderDetailByOrderId(@PathVariable Long orderId) {
-        return orderUseCase.findOrderByOrderId(orderId);
+        return getOrderDetailUseCase.findOrderByOrderId(orderId);
     }
 }

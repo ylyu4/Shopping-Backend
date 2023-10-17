@@ -1,6 +1,6 @@
 package com.example.shoppingbackend.adapter.in;
 
-import com.example.shoppingbackend.application.port.in.CustomerUseCase;
+import com.example.shoppingbackend.application.port.in.GetCustomerProfileUseCase;
 import com.example.shoppingbackend.domain.Customer;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,14 +11,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/customer")
 public class CustomerController {
 
-    private final CustomerUseCase customerUseCase;
+    private final GetCustomerProfileUseCase getCustomerProfileUseCase;
 
-    public CustomerController(CustomerUseCase customerUseCase) {
-        this.customerUseCase = customerUseCase;
+    public CustomerController(GetCustomerProfileUseCase getCustomerProfileUseCase) {
+        this.getCustomerProfileUseCase = getCustomerProfileUseCase;
     }
 
     @GetMapping("/profile/{id}")
     public Customer getCustomerById(@PathVariable Long id) {
-        return customerUseCase.getCustomer(id);
+        return getCustomerProfileUseCase.getCustomerProfile(id);
     }
 }

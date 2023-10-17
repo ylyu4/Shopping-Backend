@@ -4,9 +4,8 @@ import com.example.shoppingbackend.domain.Product;
 
 import java.util.List;
 
-public interface ProductPort {
+public interface GetProductListPort {
 
     List<Product> getAllProduct();
 
-    Product getProductById(Long id);
 }

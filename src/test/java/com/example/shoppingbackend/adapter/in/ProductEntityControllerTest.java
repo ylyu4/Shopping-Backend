@@ -1,8 +1,7 @@
 package com.example.shoppingbackend.adapter.in;
 
-import com.example.shoppingbackend.application.port.in.ProductUseCase;
+import com.example.shoppingbackend.application.port.in.GetProductListUseCase;
 import com.example.shoppingbackend.constant.ProductStatus;
-import com.example.shoppingbackend.adapter.persistence.ProductEntity;
 import com.example.shoppingbackend.domain.Product;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ProductEntityControllerTest {
 
     @MockBean
-    private ProductUseCase productUseCase;
+    private GetProductListUseCase getProductListUseCase;
 
     @Autowired
     private MockMvc mockMvc;
@@ -37,7 +36,7 @@ public class ProductEntityControllerTest {
     @Test
     void should_get_all_product_list_successfully() throws Exception {
 
-        doReturn(List.of(new Product(1L, "product1", 10, ProductStatus.VALID))).when(productUseCase).getProductList();
+        doReturn(List.of(new Product(1L, "product1", 10, ProductStatus.VALID))).when(getProductListUseCase).getProductList();
 
         mockMvc.perform(get("/product/list")
                         .contentType(MediaType.APPLICATION_JSON))

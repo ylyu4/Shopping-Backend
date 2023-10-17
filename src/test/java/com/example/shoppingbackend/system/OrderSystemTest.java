@@ -20,7 +20,6 @@ import java.util.List;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-
 public class OrderSystemTest {
 
     @LocalServerPort
@@ -51,6 +50,50 @@ public class OrderSystemTest {
 
         Assertions.assertEquals(HttpStatus.CREATED, response.getStatusCode());
 
+    }
+
+    @Test
+    public void should_create_order_failed_because_customer_id_is_invalid() {
+        String url = "http://localhost:" + port + "/order";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        CreateOrderCommand.OrderItemRequest orderItemRequest = new CreateOrderCommand.OrderItemRequest();
+        orderItemRequest.setId(1L);
+        orderItemRequest.setQuantity(2);
+
+        CreateOrderCommand createOrderCommand = new CreateOrderCommand();
+        createOrderCommand.setCustomerId(100L);
+        createOrderCommand.setOrderItemRequestList(List.of(orderItemRequest));
+
+        HttpEntity<CreateOrderCommand> requestEntity = new HttpEntity<>(createOrderCommand, headers);
+
+        ResponseEntity<Object> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, Object.class);
+
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    }
+
+    @Test
+    public void should_create_order_failed_because_product_id_is_invalid() {
+        String url = "http://localhost:" + port + "/order";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        CreateOrderCommand.OrderItemRequest orderItemRequest = new CreateOrderCommand.OrderItemRequest();
+        orderItemRequest.setId(100L);
+        orderItemRequest.setQuantity(2);
+
+        CreateOrderCommand createOrderCommand = new CreateOrderCommand();
+        createOrderCommand.setCustomerId(100L);
+        createOrderCommand.setOrderItemRequestList(List.of(orderItemRequest));
+
+        HttpEntity<CreateOrderCommand> requestEntity = new HttpEntity<>(createOrderCommand, headers);
+
+        ResponseEntity<Object> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, Object.class);
+
+        Assertions.assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
     @Test

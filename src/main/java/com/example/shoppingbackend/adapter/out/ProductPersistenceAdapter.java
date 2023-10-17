@@ -1,6 +1,7 @@
 package com.example.shoppingbackend.adapter.out;
 
-import com.example.shoppingbackend.application.port.out.ProductPort;
+import com.example.shoppingbackend.application.port.out.GetProductDetailPort;
+import com.example.shoppingbackend.application.port.out.GetProductListPort;
 import com.example.shoppingbackend.constant.ProductStatus;
 import com.example.shoppingbackend.domain.Product;
 import com.example.shoppingbackend.exception.ProductNotFoundException;
@@ -10,7 +11,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Component
-public class ProductPersistenceAdapter implements ProductPort {
+public class ProductPersistenceAdapter implements GetProductDetailPort, GetProductListPort {
 
     private final ProductRepository productRepository;
 

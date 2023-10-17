@@ -1,9 +1,8 @@
 package com.example.shoppingbackend.application.service;
 
-import com.example.shoppingbackend.application.port.out.CustomerPort;
+import com.example.shoppingbackend.application.port.out.GetCustomerProfilePort;
 import com.example.shoppingbackend.domain.Customer;
 import com.example.shoppingbackend.exception.CustomerNotFoundException;
-import com.example.shoppingbackend.adapter.persistence.CustomerEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,13 +15,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class CustomerEntityUseCaseTest {
+class CustomerUseCaseTest {
 
     @InjectMocks
     CustomerService customerService;
 
     @Mock
-    CustomerPort customerPort;
+    GetCustomerProfilePort getCustomerProfilePort;
 
     Customer customer;
 
@@ -35,10 +34,10 @@ class CustomerEntityUseCaseTest {
     @Test
     void should_get_the_customer_info_by_id_if_customer_exists() {
         // given
-        when(customerPort.getCustomerById(1L)).thenReturn(customer);
+        when(getCustomerProfilePort.getCustomerById(1L)).thenReturn(customer);
 
         // when
-        Customer response = customerService.getCustomer(1L);
+        Customer response = customerService.getCustomerProfile(1L);
 
         // then
         assertEquals(customer, response);
@@ -47,10 +46,10 @@ class CustomerEntityUseCaseTest {
     @Test
     void should_throw_exception_when_can_not_found_customer_by_id() {
         // given
-        when(customerPort.getCustomerById(1L)).thenThrow(CustomerNotFoundException.class);
+        when(getCustomerProfilePort.getCustomerById(1L)).thenThrow(CustomerNotFoundException.class);
 
         //then
-        assertThrows(CustomerNotFoundException.class, () -> customerService.getCustomer(1L));
+        assertThrows(CustomerNotFoundException.class, () -> customerService.getCustomerProfile(1L));
     }
 
 }

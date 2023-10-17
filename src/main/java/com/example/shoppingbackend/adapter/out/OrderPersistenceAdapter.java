@@ -5,7 +5,8 @@ import com.example.shoppingbackend.adapter.persistence.CustomerEntity;
 import com.example.shoppingbackend.adapter.persistence.OrderEntity;
 import com.example.shoppingbackend.adapter.persistence.OrderItemEntity;
 import com.example.shoppingbackend.adapter.persistence.ProductEntity;
-import com.example.shoppingbackend.application.port.out.OrderPort;
+import com.example.shoppingbackend.application.port.out.GetOrderDetailPort;
+import com.example.shoppingbackend.application.port.out.SaveOrderPort;
 import com.example.shoppingbackend.domain.Order;
 import com.example.shoppingbackend.exception.CustomerNotFoundException;
 import com.example.shoppingbackend.exception.OrderNotFoundException;
@@ -15,7 +16,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-public class OrderPersistenceAdapter implements OrderPort {
+public class OrderPersistenceAdapter implements SaveOrderPort, GetOrderDetailPort {
 
     private final OrderRepository orderRepository;
 

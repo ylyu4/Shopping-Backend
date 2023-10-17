@@ -1,9 +1,8 @@
 package com.example.shoppingbackend.adapter.in;
 
-import com.example.shoppingbackend.application.port.in.CustomerUseCase;
+import com.example.shoppingbackend.application.port.in.GetCustomerProfileUseCase;
 import com.example.shoppingbackend.domain.Customer;
 import com.example.shoppingbackend.exception.CustomerNotFoundException;
-import com.example.shoppingbackend.adapter.persistence.CustomerEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.json.AutoConfigureJsonTesters;
@@ -28,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class CustomerEntityControllerTest {
 
     @MockBean
-    private CustomerUseCase customerUseCase;
+    private GetCustomerProfileUseCase customerUseCase;
 
     @Autowired
     private MockMvc mockMvc;
@@ -37,7 +36,7 @@ public class CustomerEntityControllerTest {
     @Test
     void should_find_customer_profile_successfully() throws Exception {
 
-        doReturn(new Customer(1L, "Jack")).when(customerUseCase).getCustomer(1L);
+        doReturn(new Customer(1L, "Jack")).when(customerUseCase).getCustomerProfile(1L);
 
         mockMvc.perform(get("/customer/profile/{id}", 1L)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -49,7 +48,7 @@ public class CustomerEntityControllerTest {
     @Test
     void should_throw_customer_not_found_successfully() throws Exception {
 
-        doThrow(new CustomerNotFoundException("not found")).when(customerUseCase).getCustomer(1L);
+        doThrow(new CustomerNotFoundException("not found")).when(customerUseCase).getCustomerProfile(1L);
 
         mockMvc.perform(get("/customer/profile/{id}", 1L)
                         .contentType(MediaType.APPLICATION_JSON))

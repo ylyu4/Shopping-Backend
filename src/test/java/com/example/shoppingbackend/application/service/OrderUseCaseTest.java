@@ -1,8 +1,8 @@
 package com.example.shoppingbackend.application.service;
 
-import com.example.shoppingbackend.application.port.out.CustomerPort;
-import com.example.shoppingbackend.application.port.out.OrderPort;
-import com.example.shoppingbackend.application.port.out.ProductPort;
+import com.example.shoppingbackend.application.port.out.GetCustomerProfilePort;
+import com.example.shoppingbackend.application.port.out.GetOrderDetailPort;
+import com.example.shoppingbackend.application.port.out.SaveOrderPort;
 import com.example.shoppingbackend.constant.ProductStatus;
 import com.example.shoppingbackend.domain.Customer;
 import com.example.shoppingbackend.domain.Order;
@@ -10,11 +10,6 @@ import com.example.shoppingbackend.domain.OrderItem;
 import com.example.shoppingbackend.domain.Product;
 import com.example.shoppingbackend.exception.CustomerNotFoundException;
 import com.example.shoppingbackend.exception.OrderNotFoundException;
-import com.example.shoppingbackend.exception.ProductNotFoundException;
-import com.example.shoppingbackend.adapter.persistence.CustomerEntity;
-import com.example.shoppingbackend.adapter.persistence.OrderEntity;
-import com.example.shoppingbackend.adapter.persistence.OrderItemEntity;
-import com.example.shoppingbackend.adapter.persistence.ProductEntity;
 import com.example.shoppingbackend.adapter.in.command.CreateOrderCommand;
 import com.example.shoppingbackend.adapter.out.response.CustomerOrdersResponse;
 import com.example.shoppingbackend.adapter.out.response.OrderDetailsResponse;
@@ -35,19 +30,19 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class OrderEntityUseCaseTest {
+class OrderUseCaseTest {
 
     @InjectMocks
     OrderService orderService;
 
     @Mock
-    OrderPort orderPort;
+    SaveOrderPort saveOrderPort;
 
     @Mock
-    ProductPort productPort;
+    GetOrderDetailPort getOrderDetailPort;
 
     @Mock
-    CustomerPort customerPort;
+    GetCustomerProfilePort getCustomerProfilePort;
 
     CreateOrderCommand request;
 
@@ -69,26 +64,8 @@ class OrderEntityUseCaseTest {
         orderService.createOrder(request);
 
         // then
-        verify(orderPort, times(1)).saveOrder(any(), any());
+        verify(saveOrderPort, times(1)).saveOrder(any(), any());
     }
-
-//    @Test
-//    void should_throw_exception_when_request_id_is_invalid() {
-//        // given
-//        when(customerPort.getCustomerById(1L)).thenReturn(new Customer(1L, "jack"));
-//        when(productPort.getProductById(1L)).thenThrow(new ProductNotFoundException("Can not find product for this id: 1L"));
-//
-//        // then
-//        assertThrows(ProductNotFoundException.class, () -> orderService.createOrder(request));
-//    }
-
-//    @Test
-//    void should_throw_exception_when_customer_id_id_invalid() {
-//        // given
-//        when(customerPort.getCustomerById(1L)).thenThrow(new CustomerNotFoundException("not found"));
-//        // then
-//        assertThrows(CustomerNotFoundException.class, () -> orderService.createOrder(request));
-//    }
 
     @Test
     void should_return_the_correct_order_response() {
@@ -100,10 +77,10 @@ class OrderEntityUseCaseTest {
         Customer customer = new Customer(1L, "jack");
         customer.setOrders(List.of(order));
 
-        when(customerPort.getCustomerById(2L)).thenReturn(customer);
+        when(getCustomerProfilePort.getCustomerById(2L)).thenReturn(customer);
 
         // when
-        CustomerOrdersResponse response = orderService.findAllOrderByCustomerId(2L);
+        CustomerOrdersResponse response = orderService.findAllOrdersByCustomerId(2L);
 
         // then
         assertEquals(1, response.getOrders().size());
@@ -113,9 +90,9 @@ class OrderEntityUseCaseTest {
     @Test
     void should_throw_another_exception_when_customer_id_is_invalid() {
         // given
-        when(customerPort.getCustomerById(1L)).thenThrow(new CustomerNotFoundException("not found"));
+        when(getCustomerProfilePort.getCustomerById(1L)).thenThrow(new CustomerNotFoundException("not found"));
         // then
-        assertThrows(CustomerNotFoundException.class, () -> orderService.findAllOrderByCustomerId(1L));
+        assertThrows(CustomerNotFoundException.class, () -> orderService.findAllOrdersByCustomerId(1L));
     }
 
     @Test
@@ -128,7 +105,7 @@ class OrderEntityUseCaseTest {
         Customer customer = new Customer(1L, "jack");
         customer.setOrders(List.of(order));
 
-        when(orderPort.getOrderById(any())).thenReturn(order);
+        when(getOrderDetailPort.getOrderById(any())).thenReturn(order);
 
         // when
         OrderDetailsResponse response = orderService.findOrderByOrderId(2L);
@@ -140,7 +117,7 @@ class OrderEntityUseCaseTest {
     @Test
     void should_throw_exception_when_order_id_is_invalid() {
         // given
-        when(orderPort.getOrderById(1L)).thenThrow(new OrderNotFoundException("not found"));
+        when(getOrderDetailPort.getOrderById(1L)).thenThrow(new OrderNotFoundException("not found"));
         // then
         assertThrows(OrderNotFoundException.class, () -> orderService.findOrderByOrderId(1L));
     }

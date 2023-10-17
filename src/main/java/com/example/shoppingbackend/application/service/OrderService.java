@@ -1,9 +1,11 @@
 package com.example.shoppingbackend.application.service;
 
-import com.example.shoppingbackend.application.port.in.OrderUseCase;
-import com.example.shoppingbackend.application.port.out.CustomerPort;
-import com.example.shoppingbackend.application.port.out.OrderPort;
-import com.example.shoppingbackend.application.port.out.ProductPort;
+import com.example.shoppingbackend.application.port.in.CreateOrderUseCase;
+import com.example.shoppingbackend.application.port.in.GetAllOrdersUseCase;
+import com.example.shoppingbackend.application.port.in.GetOrderDetailUseCase;
+import com.example.shoppingbackend.application.port.out.GetCustomerProfilePort;
+import com.example.shoppingbackend.application.port.out.GetOrderDetailPort;
+import com.example.shoppingbackend.application.port.out.SaveOrderPort;
 import com.example.shoppingbackend.adapter.in.command.CreateOrderCommand;
 import com.example.shoppingbackend.adapter.out.response.CustomerOrdersResponse;
 import com.example.shoppingbackend.adapter.out.response.OrderDetailsResponse;
@@ -14,28 +16,28 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class OrderService implements OrderUseCase {
+public class OrderService implements GetAllOrdersUseCase, CreateOrderUseCase, GetOrderDetailUseCase {
 
-    private final OrderPort orderPort;
+    private final SaveOrderPort saveOrderPort;
 
-    private final CustomerPort customerPort;
+    private final GetOrderDetailPort getOrderDetailPort;
 
-    private final ProductPort productPort;
+    private final GetCustomerProfilePort getCustomerProfilePort;
 
-    public OrderService(OrderPort orderPort,
-                        CustomerPort customerPort,
-                        ProductPort productPort) {
-        this.orderPort = orderPort;
-        this.customerPort = customerPort;
-        this.productPort = productPort;
+    public OrderService(SaveOrderPort saveOrderPort,
+                               GetOrderDetailPort getOrderDetailPort,
+                               GetCustomerProfilePort getCustomerProfilePort) {
+        this.saveOrderPort = saveOrderPort;
+        this.getOrderDetailPort = getOrderDetailPort;
+        this.getCustomerProfilePort = getCustomerProfilePort;
     }
 
     public void createOrder(CreateOrderCommand request) {
-        orderPort.saveOrder(request.getCustomerId(), request.getOrderItemRequestList());
+        saveOrderPort.saveOrder(request.getCustomerId(), request.getOrderItemRequestList());
     }
 
-    public CustomerOrdersResponse findAllOrderByCustomerId(Long id) {
-        Customer customer = customerPort.getCustomerById(id);
+    public CustomerOrdersResponse findAllOrdersByCustomerId(Long id) {
+        Customer customer = getCustomerProfilePort.getCustomerById(id);
 
         List<OrderDetailsResponse> orderDetailResponses = customer.getOrders().stream()
                 .map(this::convertOrderToOrderDetailResponse).toList();
@@ -43,7 +45,7 @@ public class OrderService implements OrderUseCase {
     }
 
     public OrderDetailsResponse findOrderByOrderId(Long orderId) {
-        Order order = orderPort.getOrderById(orderId);
+        Order order = getOrderDetailPort.getOrderById(orderId);
         return convertOrderToOrderDetailResponse(order);
     }
 

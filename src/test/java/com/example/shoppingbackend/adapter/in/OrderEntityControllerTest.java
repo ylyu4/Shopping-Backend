@@ -1,6 +1,8 @@
 package com.example.shoppingbackend.adapter.in;
 
-import com.example.shoppingbackend.application.port.in.OrderUseCase;
+import com.example.shoppingbackend.application.port.in.CreateOrderUseCase;
+import com.example.shoppingbackend.application.port.in.GetAllOrdersUseCase;
+import com.example.shoppingbackend.application.port.in.GetOrderDetailUseCase;
 import com.example.shoppingbackend.constant.OrderStatus;
 import com.example.shoppingbackend.exception.CustomerNotFoundException;
 import com.example.shoppingbackend.exception.OrderNotFoundException;
@@ -37,7 +39,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class OrderEntityControllerTest {
 
     @MockBean
-    private OrderUseCase orderUseCase;
+    private GetAllOrdersUseCase getAllOrdersUseCase;
+
+    @MockBean
+    private CreateOrderUseCase createOrderUseCase;
+
+    @MockBean
+    private GetOrderDetailUseCase getOrderDetailUseCase;
 
     @Autowired
     private MockMvc mockMvc;
@@ -61,7 +69,7 @@ public class OrderEntityControllerTest {
     @Test
     void should_create_order_successfully() throws Exception {
 
-        doNothing().when(orderUseCase).createOrder(createOrderCommand);
+        doNothing().when(createOrderUseCase).createOrder(createOrderCommand);
 
         mockMvc.perform(post("/order")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -72,7 +80,7 @@ public class OrderEntityControllerTest {
     @Test
     void should_throw_product_not_found_exception() throws Exception {
 
-        doThrow(new ProductNotFoundException("not found")).when(orderUseCase).createOrder(any());
+        doThrow(new ProductNotFoundException("not found")).when(createOrderUseCase).createOrder(any());
 
         mockMvc.perform(post("/order")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -87,7 +95,7 @@ public class OrderEntityControllerTest {
         OrderDetailsResponse orderDetailsResponse = new OrderDetailsResponse(List.of(orderProductDetails), 105, OrderStatus.CREATED);
         CustomerOrdersResponse response = new CustomerOrdersResponse(List.of(orderDetailsResponse));
 
-        doReturn(response).when(orderUseCase).findAllOrderByCustomerId(1L);
+        doReturn(response).when(getAllOrdersUseCase).findAllOrdersByCustomerId(1L);
         mockMvc.perform(get("/order/{userId}", 1L)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -98,7 +106,7 @@ public class OrderEntityControllerTest {
     @Test
     void should_throw_customer_not_found_exception() throws Exception {
 
-        doThrow(new CustomerNotFoundException("not found")).when(orderUseCase).findAllOrderByCustomerId(1L);
+        doThrow(new CustomerNotFoundException("not found")).when(getAllOrdersUseCase).findAllOrdersByCustomerId(1L);
 
         mockMvc.perform(get("/order/{userId}", 1L)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -111,7 +119,7 @@ public class OrderEntityControllerTest {
         OrderDetailsResponse.OrderProductDetails orderProductDetails = new OrderDetailsResponse.OrderProductDetails("bike", 3, 35);
         OrderDetailsResponse orderDetailsResponse = new OrderDetailsResponse(List.of(orderProductDetails), 105, OrderStatus.CREATED);
 
-        doReturn(orderDetailsResponse).when(orderUseCase).findOrderByOrderId(1L);
+        doReturn(orderDetailsResponse).when(getOrderDetailUseCase).findOrderByOrderId(1L);
         mockMvc.perform(get("/order/detail/{orderId}", 1L)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -122,7 +130,7 @@ public class OrderEntityControllerTest {
     @Test
     void should_throw_order_not_found_exception() throws Exception {
 
-        doThrow(new OrderNotFoundException("not found")).when(orderUseCase).findOrderByOrderId(1L);
+        doThrow(new OrderNotFoundException("not found")).when(getOrderDetailUseCase).findOrderByOrderId(1L);
 
         mockMvc.perform(get("/order/detail/{orderId}", 1L)
                         .contentType(MediaType.APPLICATION_JSON))
