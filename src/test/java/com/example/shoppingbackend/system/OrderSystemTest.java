@@ -1,8 +1,8 @@
 package com.example.shoppingbackend.system;
 
 import com.example.shoppingbackend.adapter.in.command.CreateOrderCommand;
-import com.example.shoppingbackend.adapter.out.response.CustomerOrdersResponse;
-import com.example.shoppingbackend.adapter.out.response.OrderDetailsResponse;
+import com.example.shoppingbackend.adapter.in.response.CustomerOrdersResponse;
+import com.example.shoppingbackend.adapter.in.response.OrderDetailsResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

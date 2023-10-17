@@ -1,4 +1,4 @@
-package com.example.shoppingbackend.adapter.out.response;
+package com.example.shoppingbackend.adapter.in.response;
 
 import java.util.List;
 

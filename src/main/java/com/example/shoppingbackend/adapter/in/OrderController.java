@@ -1,8 +1,8 @@
 package com.example.shoppingbackend.adapter.in;
 
 import com.example.shoppingbackend.adapter.in.command.CreateOrderCommand;
-import com.example.shoppingbackend.adapter.out.response.CustomerOrdersResponse;
-import com.example.shoppingbackend.adapter.out.response.OrderDetailsResponse;
+import com.example.shoppingbackend.adapter.in.response.CustomerOrdersResponse;
+import com.example.shoppingbackend.adapter.in.response.OrderDetailsResponse;
 import com.example.shoppingbackend.application.port.in.CreateOrderUseCase;
 import com.example.shoppingbackend.application.port.in.GetAllOrdersUseCase;
 import com.example.shoppingbackend.application.port.in.GetOrderDetailUseCase;
