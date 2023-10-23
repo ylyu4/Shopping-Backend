@@ -1,6 +1,6 @@
 package com.example.shoppingbackend.adapter.out;
 
-import com.example.shoppingbackend.adapter.in.command.CreateOrderCommand;
+import com.example.shoppingbackend.adapter.in.request.CreateOrderRequest;
 import com.example.shoppingbackend.adapter.persistence.CustomerEntity;
 import com.example.shoppingbackend.adapter.persistence.OrderEntity;
 import com.example.shoppingbackend.adapter.persistence.OrderItemEntity;
@@ -31,7 +31,7 @@ public class OrderPersistenceAdapter implements SaveOrderPort, GetOrderDetailPor
     }
 
 
-    public void saveOrder(Long id, List<CreateOrderCommand.OrderItemRequest> orderItemRequestList) {
+    public void saveOrder(Long id, List<CreateOrderRequest.OrderItemRequest> orderItemRequestList) {
         CustomerEntity customer = customerRepository.findById(id).orElseThrow(() ->
                 new CustomerNotFoundException(String.format("Can not find customer by this id: %s", id)));
         List<OrderItemEntity> orderItems = orderItemRequestList.stream().map(it -> {

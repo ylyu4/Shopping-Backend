@@ -1,6 +1,6 @@
 package com.example.shoppingbackend.adapter.in.response;
 
-import com.example.shoppingbackend.constant.OrderStatus;
+import com.example.shoppingbackend.domain.constant.OrderStatus;
 
 import java.util.List;
 

@@ -2,7 +2,7 @@ package com.example.shoppingbackend.adapter.out;
 
 import com.example.shoppingbackend.application.port.out.GetProductDetailPort;
 import com.example.shoppingbackend.application.port.out.GetProductListPort;
-import com.example.shoppingbackend.constant.ProductStatus;
+import com.example.shoppingbackend.domain.constant.ProductStatus;
 import com.example.shoppingbackend.domain.Product;
 import com.example.shoppingbackend.exception.ProductNotFoundException;
 import org.springframework.stereotype.Component;

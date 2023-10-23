@@ -1,7 +1,7 @@
 package com.example.shoppingbackend.application.service;
 
 import com.example.shoppingbackend.application.port.out.GetProductListPort;
-import com.example.shoppingbackend.constant.ProductStatus;
+import com.example.shoppingbackend.domain.constant.ProductStatus;
 import com.example.shoppingbackend.domain.Product;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

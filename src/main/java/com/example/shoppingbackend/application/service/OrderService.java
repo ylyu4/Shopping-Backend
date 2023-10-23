@@ -6,7 +6,7 @@ import com.example.shoppingbackend.application.port.in.GetOrderDetailUseCase;
 import com.example.shoppingbackend.application.port.out.GetCustomerProfilePort;
 import com.example.shoppingbackend.application.port.out.GetOrderDetailPort;
 import com.example.shoppingbackend.application.port.out.SaveOrderPort;
-import com.example.shoppingbackend.adapter.in.command.CreateOrderCommand;
+import com.example.shoppingbackend.adapter.in.request.CreateOrderRequest;
 import com.example.shoppingbackend.adapter.in.response.CustomerOrdersResponse;
 import com.example.shoppingbackend.adapter.in.response.OrderDetailsResponse;
 import com.example.shoppingbackend.domain.Customer;
@@ -32,7 +32,7 @@ public class OrderService implements GetAllOrdersUseCase, CreateOrderUseCase, Ge
         this.getCustomerProfilePort = getCustomerProfilePort;
     }
 
-    public void createOrder(CreateOrderCommand request) {
+    public void createOrder(CreateOrderRequest request) {
         saveOrderPort.saveOrder(request.getCustomerId(), request.getOrderItemRequestList());
     }
 

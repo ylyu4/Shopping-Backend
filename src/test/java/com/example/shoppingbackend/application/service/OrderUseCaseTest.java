@@ -3,14 +3,14 @@ package com.example.shoppingbackend.application.service;
 import com.example.shoppingbackend.application.port.out.GetCustomerProfilePort;
 import com.example.shoppingbackend.application.port.out.GetOrderDetailPort;
 import com.example.shoppingbackend.application.port.out.SaveOrderPort;
-import com.example.shoppingbackend.constant.ProductStatus;
+import com.example.shoppingbackend.domain.constant.ProductStatus;
 import com.example.shoppingbackend.domain.Customer;
 import com.example.shoppingbackend.domain.Order;
 import com.example.shoppingbackend.domain.OrderItem;
 import com.example.shoppingbackend.domain.Product;
 import com.example.shoppingbackend.exception.CustomerNotFoundException;
 import com.example.shoppingbackend.exception.OrderNotFoundException;
-import com.example.shoppingbackend.adapter.in.command.CreateOrderCommand;
+import com.example.shoppingbackend.adapter.in.request.CreateOrderRequest;
 import com.example.shoppingbackend.adapter.in.response.CustomerOrdersResponse;
 import com.example.shoppingbackend.adapter.in.response.OrderDetailsResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,15 +44,15 @@ class OrderUseCaseTest {
     @Mock
     GetCustomerProfilePort getCustomerProfilePort;
 
-    CreateOrderCommand request;
+    CreateOrderRequest request;
 
     @BeforeEach
     void init() {
-        CreateOrderCommand.OrderItemRequest orderItemRequest = new CreateOrderCommand.OrderItemRequest();
+        CreateOrderRequest.OrderItemRequest orderItemRequest = new CreateOrderRequest.OrderItemRequest();
         orderItemRequest.setId(1L);
         orderItemRequest.setQuantity(2);
 
-        request = new CreateOrderCommand();
+        request = new CreateOrderRequest();
         request.setCustomerId(1L);
         request.setOrderItemRequestList(List.of(orderItemRequest));
     }

@@ -1,7 +1,7 @@
 package com.example.shoppingbackend.adapter.in;
 
 import com.example.shoppingbackend.application.port.in.GetProductListUseCase;
-import com.example.shoppingbackend.constant.ProductStatus;
+import com.example.shoppingbackend.domain.constant.ProductStatus;
 import com.example.shoppingbackend.domain.Product;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

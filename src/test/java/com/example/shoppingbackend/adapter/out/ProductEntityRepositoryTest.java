@@ -1,6 +1,6 @@
 package com.example.shoppingbackend.adapter.out;
 
-import com.example.shoppingbackend.constant.ProductStatus;
+import com.example.shoppingbackend.domain.constant.ProductStatus;
 import com.example.shoppingbackend.adapter.persistence.ProductEntity;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

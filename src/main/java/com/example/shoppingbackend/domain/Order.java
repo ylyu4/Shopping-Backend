@@ -1,7 +1,7 @@
 package com.example.shoppingbackend.domain;
 
 import com.example.shoppingbackend.adapter.persistence.OrderEntity;
-import com.example.shoppingbackend.constant.OrderStatus;
+import com.example.shoppingbackend.domain.constant.OrderStatus;
 
 import java.util.List;
 

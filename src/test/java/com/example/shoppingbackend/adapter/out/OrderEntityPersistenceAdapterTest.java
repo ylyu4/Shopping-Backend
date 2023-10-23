@@ -1,6 +1,6 @@
 package com.example.shoppingbackend.adapter.out;
 
-import com.example.shoppingbackend.adapter.in.command.CreateOrderCommand;
+import com.example.shoppingbackend.adapter.in.request.CreateOrderRequest;
 import com.example.shoppingbackend.adapter.persistence.CustomerEntity;
 import com.example.shoppingbackend.adapter.persistence.OrderEntity;
 import com.example.shoppingbackend.domain.Order;
@@ -49,7 +49,7 @@ class OrderEntityPersistenceAdapterTest {
         // given
         when(customerRepository.findById(1L)).thenReturn(Optional.of(new CustomerEntity(1L, "jack")));
         when(productRepository.findById(1L)).thenThrow(new ProductNotFoundException("Can not find product for this id: 1L"));
-        CreateOrderCommand.OrderItemRequest orderItemRequest = new CreateOrderCommand.OrderItemRequest();
+        CreateOrderRequest.OrderItemRequest orderItemRequest = new CreateOrderRequest.OrderItemRequest();
         orderItemRequest.setId(1L);
         orderItemRequest.setQuantity(4);
 

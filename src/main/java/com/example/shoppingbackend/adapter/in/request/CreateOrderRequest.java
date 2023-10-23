@@ -1,8 +1,8 @@
-package com.example.shoppingbackend.adapter.in.command;
+package com.example.shoppingbackend.adapter.in.request;
 
 import java.util.List;
 
-public class CreateOrderCommand {
+public class CreateOrderRequest {
 
     private Long customerId;
 

@@ -1,6 +1,6 @@
 package com.example.shoppingbackend.adapter.out;
 
-import com.example.shoppingbackend.constant.ProductStatus;
+import com.example.shoppingbackend.domain.constant.ProductStatus;
 import com.example.shoppingbackend.adapter.persistence.CustomerEntity;
 import com.example.shoppingbackend.adapter.persistence.OrderEntity;
 import com.example.shoppingbackend.adapter.persistence.ProductEntity;

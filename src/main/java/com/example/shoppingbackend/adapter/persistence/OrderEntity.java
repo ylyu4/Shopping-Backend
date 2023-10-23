@@ -1,6 +1,6 @@
 package com.example.shoppingbackend.adapter.persistence;
 
-import com.example.shoppingbackend.constant.OrderStatus;
+import com.example.shoppingbackend.domain.constant.OrderStatus;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

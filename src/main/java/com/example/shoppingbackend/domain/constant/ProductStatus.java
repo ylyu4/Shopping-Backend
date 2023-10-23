@@ -1,4 +1,4 @@
-package com.example.shoppingbackend.constant;
+package com.example.shoppingbackend.domain.constant;
 
 public enum ProductStatus {
 

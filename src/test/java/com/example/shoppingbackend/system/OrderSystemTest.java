@@ -1,6 +1,6 @@
 package com.example.shoppingbackend.system;
 
-import com.example.shoppingbackend.adapter.in.command.CreateOrderCommand;
+import com.example.shoppingbackend.adapter.in.request.CreateOrderRequest;
 import com.example.shoppingbackend.adapter.in.response.CustomerOrdersResponse;
 import com.example.shoppingbackend.adapter.in.response.OrderDetailsResponse;
 import org.junit.jupiter.api.Assertions;
@@ -36,15 +36,15 @@ public class OrderSystemTest {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        CreateOrderCommand.OrderItemRequest orderItemRequest = new CreateOrderCommand.OrderItemRequest();
+        CreateOrderRequest.OrderItemRequest orderItemRequest = new CreateOrderRequest.OrderItemRequest();
         orderItemRequest.setId(1L);
         orderItemRequest.setQuantity(2);
 
-        CreateOrderCommand createOrderCommand = new CreateOrderCommand();
-        createOrderCommand.setCustomerId(1L);
-        createOrderCommand.setOrderItemRequestList(List.of(orderItemRequest));
+        CreateOrderRequest createOrderRequest = new CreateOrderRequest();
+        createOrderRequest.setCustomerId(1L);
+        createOrderRequest.setOrderItemRequestList(List.of(orderItemRequest));
 
-        HttpEntity<CreateOrderCommand> requestEntity = new HttpEntity<>(createOrderCommand, headers);
+        HttpEntity<CreateOrderRequest> requestEntity = new HttpEntity<>(createOrderRequest, headers);
 
         ResponseEntity<Object> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, Object.class);
 
@@ -59,15 +59,15 @@ public class OrderSystemTest {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        CreateOrderCommand.OrderItemRequest orderItemRequest = new CreateOrderCommand.OrderItemRequest();
+        CreateOrderRequest.OrderItemRequest orderItemRequest = new CreateOrderRequest.OrderItemRequest();
         orderItemRequest.setId(1L);
         orderItemRequest.setQuantity(2);
 
-        CreateOrderCommand createOrderCommand = new CreateOrderCommand();
-        createOrderCommand.setCustomerId(100L);
-        createOrderCommand.setOrderItemRequestList(List.of(orderItemRequest));
+        CreateOrderRequest createOrderRequest = new CreateOrderRequest();
+        createOrderRequest.setCustomerId(100L);
+        createOrderRequest.setOrderItemRequestList(List.of(orderItemRequest));
 
-        HttpEntity<CreateOrderCommand> requestEntity = new HttpEntity<>(createOrderCommand, headers);
+        HttpEntity<CreateOrderRequest> requestEntity = new HttpEntity<>(createOrderRequest, headers);
 
         ResponseEntity<Object> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, Object.class);
 
@@ -81,15 +81,15 @@ public class OrderSystemTest {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        CreateOrderCommand.OrderItemRequest orderItemRequest = new CreateOrderCommand.OrderItemRequest();
+        CreateOrderRequest.OrderItemRequest orderItemRequest = new CreateOrderRequest.OrderItemRequest();
         orderItemRequest.setId(100L);
         orderItemRequest.setQuantity(2);
 
-        CreateOrderCommand createOrderCommand = new CreateOrderCommand();
-        createOrderCommand.setCustomerId(100L);
-        createOrderCommand.setOrderItemRequestList(List.of(orderItemRequest));
+        CreateOrderRequest createOrderRequest = new CreateOrderRequest();
+        createOrderRequest.setCustomerId(100L);
+        createOrderRequest.setOrderItemRequestList(List.of(orderItemRequest));
 
-        HttpEntity<CreateOrderCommand> requestEntity = new HttpEntity<>(createOrderCommand, headers);
+        HttpEntity<CreateOrderRequest> requestEntity = new HttpEntity<>(createOrderRequest, headers);
 
         ResponseEntity<Object> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, Object.class);
 

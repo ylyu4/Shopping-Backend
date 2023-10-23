@@ -3,11 +3,11 @@ package com.example.shoppingbackend.adapter.in;
 import com.example.shoppingbackend.application.port.in.CreateOrderUseCase;
 import com.example.shoppingbackend.application.port.in.GetAllOrdersUseCase;
 import com.example.shoppingbackend.application.port.in.GetOrderDetailUseCase;
-import com.example.shoppingbackend.constant.OrderStatus;
+import com.example.shoppingbackend.domain.constant.OrderStatus;
 import com.example.shoppingbackend.exception.CustomerNotFoundException;
 import com.example.shoppingbackend.exception.OrderNotFoundException;
 import com.example.shoppingbackend.exception.ProductNotFoundException;
-import com.example.shoppingbackend.adapter.in.command.CreateOrderCommand;
+import com.example.shoppingbackend.adapter.in.request.CreateOrderRequest;
 import com.example.shoppingbackend.adapter.in.response.CustomerOrdersResponse;
 import com.example.shoppingbackend.adapter.in.response.OrderDetailsResponse;
 import org.junit.jupiter.api.BeforeEach;
@@ -51,29 +51,29 @@ public class OrderEntityControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private JacksonTester<CreateOrderCommand> request;
+    private JacksonTester<CreateOrderRequest> request;
 
-    CreateOrderCommand createOrderCommand;
+    CreateOrderRequest createOrderRequest;
 
     @BeforeEach
     void init() {
-        CreateOrderCommand.OrderItemRequest orderItemRequest = new CreateOrderCommand.OrderItemRequest();
+        CreateOrderRequest.OrderItemRequest orderItemRequest = new CreateOrderRequest.OrderItemRequest();
         orderItemRequest.setId(1L);
         orderItemRequest.setQuantity(2);
 
-        createOrderCommand = new CreateOrderCommand();
-        createOrderCommand.setCustomerId(1L);
-        createOrderCommand.setOrderItemRequestList(List.of(orderItemRequest));
+        createOrderRequest = new CreateOrderRequest();
+        createOrderRequest.setCustomerId(1L);
+        createOrderRequest.setOrderItemRequestList(List.of(orderItemRequest));
     }
 
     @Test
     void should_create_order_successfully() throws Exception {
 
-        doNothing().when(createOrderUseCase).createOrder(createOrderCommand);
+        doNothing().when(createOrderUseCase).createOrder(createOrderRequest);
 
         mockMvc.perform(post("/order")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(request.write(createOrderCommand).getJson()))
+                        .content(request.write(createOrderRequest).getJson()))
                         .andExpect(status().isCreated());
     }
 
@@ -84,7 +84,7 @@ public class OrderEntityControllerTest {
 
         mockMvc.perform(post("/order")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(request.write(createOrderCommand).getJson()))
+                        .content(request.write(createOrderRequest).getJson()))
                         .andExpect(status().isNotFound());
     }
 

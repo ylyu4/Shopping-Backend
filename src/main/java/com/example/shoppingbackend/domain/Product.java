@@ -1,7 +1,7 @@
 package com.example.shoppingbackend.domain;
 
 import com.example.shoppingbackend.adapter.persistence.ProductEntity;
-import com.example.shoppingbackend.constant.ProductStatus;
+import com.example.shoppingbackend.domain.constant.ProductStatus;
 
 
 public class Product {

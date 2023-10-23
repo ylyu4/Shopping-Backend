@@ -1,6 +1,6 @@
 package com.example.shoppingbackend.adapter.in;
 
-import com.example.shoppingbackend.adapter.in.command.CreateOrderCommand;
+import com.example.shoppingbackend.adapter.in.request.CreateOrderRequest;
 import com.example.shoppingbackend.adapter.in.response.CustomerOrdersResponse;
 import com.example.shoppingbackend.adapter.in.response.OrderDetailsResponse;
 import com.example.shoppingbackend.application.port.in.CreateOrderUseCase;
@@ -33,8 +33,8 @@ public class OrderController {
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public void createOrder(@RequestBody CreateOrderCommand createOrderCommand) {
-        createOrderUseCase.createOrder(createOrderCommand);
+    public void createOrder(@RequestBody CreateOrderRequest createOrderRequest) {
+        createOrderUseCase.createOrder(createOrderRequest);
     }
 
     @GetMapping("/{userId}")
