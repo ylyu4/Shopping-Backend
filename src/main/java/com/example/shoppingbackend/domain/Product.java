@@ -1,7 +1,6 @@
 package com.example.shoppingbackend.domain;
 
 import com.example.shoppingbackend.adapter.persistence.ProductEntity;
-import com.example.shoppingbackend.domain.constant.ProductStatus;
 
 
 public class Product {
@@ -10,9 +9,11 @@ public class Product {
 
     private String name;
 
-    private Integer price;
+    private Double originalPrice;
 
-    private ProductStatus productStatus;
+    private Double discountRate;
+
+    private Double finalPrice;
 
     public Long getId() {
         return id;
@@ -22,25 +23,31 @@ public class Product {
         return name;
     }
 
-    public Integer getPrice() {
-        return price;
+    public Double getOriginalPrice() {
+        return originalPrice;
     }
 
-    public ProductStatus getProductStatus() {
-        return productStatus;
+    public Double getDiscountRate() {
+        return discountRate;
+    }
+
+    public Double getFinalPrice() {
+        return finalPrice;
     }
 
     public Product(ProductEntity entity) {
         this.id = entity.getId();
         this.name = entity.getName();
-        this.price = entity.getPrice();
-        this.productStatus = entity.getProductStatus();
+        this.originalPrice = entity.getPrice().doubleValue();
+        this.discountRate = entity.getDiscountRate();
+        this.finalPrice = entity.getDiscountRate() * entity.getPrice();
     }
 
-    public Product(Long id, String name, Integer price, ProductStatus productStatus) {
+    public Product(Long id, String name, Double discountRate, Double originalPrice) {
         this.id = id;
         this.name = name;
-        this.price = price;
-        this.productStatus = productStatus;
+        this.discountRate = discountRate;
+        this.originalPrice = originalPrice;
+        this.finalPrice = discountRate * originalPrice;
     }
 }

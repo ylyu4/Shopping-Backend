@@ -3,6 +3,7 @@ package com.example.shoppingbackend.adapter.in;
 import com.example.shoppingbackend.application.port.in.CreateOrderUseCase;
 import com.example.shoppingbackend.application.port.in.GetAllOrdersUseCase;
 import com.example.shoppingbackend.application.port.in.GetOrderDetailUseCase;
+import com.example.shoppingbackend.domain.Product;
 import com.example.shoppingbackend.domain.constant.OrderStatus;
 import com.example.shoppingbackend.exception.CustomerNotFoundException;
 import com.example.shoppingbackend.exception.OrderNotFoundException;
@@ -68,7 +69,6 @@ public class OrderEntityControllerTest {
 
     @Test
     void should_create_order_successfully() throws Exception {
-
         doNothing().when(createOrderUseCase).createOrder(createOrderRequest);
 
         mockMvc.perform(post("/order")
@@ -79,7 +79,6 @@ public class OrderEntityControllerTest {
 
     @Test
     void should_throw_product_not_found_exception() throws Exception {
-
         doThrow(new ProductNotFoundException("not found")).when(createOrderUseCase).createOrder(any());
 
         mockMvc.perform(post("/order")
@@ -90,22 +89,21 @@ public class OrderEntityControllerTest {
 
     @Test
     void should_return_the_correct_order_response() throws Exception {
-
-        OrderDetailsResponse.OrderProductDetails orderProductDetails = new OrderDetailsResponse.OrderProductDetails("bike", 3, 35);
-        OrderDetailsResponse orderDetailsResponse = new OrderDetailsResponse(List.of(orderProductDetails), 105, OrderStatus.CREATED);
+        Product product = new Product(1L, "name", 0.8, 10.0);
+        OrderDetailsResponse.OrderProductDetails orderProductDetails = new OrderDetailsResponse.OrderProductDetails(product, 3);
+        OrderDetailsResponse orderDetailsResponse = new OrderDetailsResponse(List.of(orderProductDetails), OrderStatus.CREATED);
         CustomerOrdersResponse response = new CustomerOrdersResponse(List.of(orderDetailsResponse));
 
         doReturn(response).when(getAllOrdersUseCase).findAllOrdersByCustomerId(1L);
         mockMvc.perform(get("/order/{userId}", 1L)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.orders.[0].totalPrice", is(105)))
+                .andExpect(jsonPath("$.orders.[0].finalTotalPrice", is(24.0)))
                 .andExpect(jsonPath("$.orders.[0].orderStatus", is("CREATED")));
     }
 
     @Test
     void should_throw_customer_not_found_exception() throws Exception {
-
         doThrow(new CustomerNotFoundException("not found")).when(getAllOrdersUseCase).findAllOrdersByCustomerId(1L);
 
         mockMvc.perform(get("/order/{userId}", 1L)
@@ -115,21 +113,20 @@ public class OrderEntityControllerTest {
 
     @Test
     void should_return_the_correct_order_response_by_order_id() throws Exception {
-
-        OrderDetailsResponse.OrderProductDetails orderProductDetails = new OrderDetailsResponse.OrderProductDetails("bike", 3, 35);
-        OrderDetailsResponse orderDetailsResponse = new OrderDetailsResponse(List.of(orderProductDetails), 105, OrderStatus.CREATED);
+        Product product = new Product(1L, "name", 0.8, 10.0);
+        OrderDetailsResponse.OrderProductDetails orderProductDetails = new OrderDetailsResponse.OrderProductDetails(product, 3);
+        OrderDetailsResponse orderDetailsResponse = new OrderDetailsResponse(List.of(orderProductDetails), OrderStatus.CREATED);
 
         doReturn(orderDetailsResponse).when(getOrderDetailUseCase).findOrderByOrderId(1L);
         mockMvc.perform(get("/order/detail/{orderId}", 1L)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.totalPrice", is(105)))
+                .andExpect(jsonPath("$.finalTotalPrice", is(24.0)))
                 .andExpect(jsonPath("$.orderStatus", is("CREATED")));
     }
 
     @Test
     void should_throw_order_not_found_exception() throws Exception {
-
         doThrow(new OrderNotFoundException("not found")).when(getOrderDetailUseCase).findOrderByOrderId(1L);
 
         mockMvc.perform(get("/order/detail/{orderId}", 1L)

@@ -22,6 +22,9 @@ public class ProductEntity {
 
     private Integer price;
 
+    @Column(name = "discount_rate")
+    private Double discountRate;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "product_status")
     private ProductStatus productStatus;
@@ -38,6 +41,10 @@ public class ProductEntity {
         return price;
     }
 
+    public Double getDiscountRate() {
+        return discountRate;
+    }
+
     public ProductStatus getProductStatus() {
         return productStatus;
     }
@@ -46,16 +53,18 @@ public class ProductEntity {
 
     }
 
-    public ProductEntity(String name, Integer price, ProductStatus productStatus) {
+    public ProductEntity(String name, Integer price, Double discountRate, ProductStatus productStatus) {
         this.name = name;
         this.price = price;
+        this.discountRate = discountRate;
         this.productStatus = productStatus;
     }
 
-    public ProductEntity(Long id, String name, Integer price, ProductStatus productStatus) {
+    public ProductEntity(Long id, String name, Integer price, Double discountRate, ProductStatus productStatus) {
         this.id = id;
         this.name = name;
         this.price = price;
+        this.discountRate = discountRate;
         this.productStatus = productStatus;
     }
 }

@@ -30,10 +30,10 @@ class ProductEntityPersistenceAdapterTest {
     @Test
     void should_get_the_product_list_correctly() {
         // given
-        List<ProductEntity> list = List.of(new ProductEntity(1L, "product1", 10, ProductStatus.VALID),
-                new ProductEntity(2L, "product2", 20, ProductStatus.VALID),
-                new ProductEntity(3L, "product3", null, ProductStatus.VALID),
-                new ProductEntity(4L, "product4", 10, ProductStatus.INVALID));
+        List<ProductEntity> list = List.of(new ProductEntity(1L, "product1", 10, 0.9, ProductStatus.VALID),
+                new ProductEntity(2L, "product2", 20, 0.8, ProductStatus.VALID),
+                new ProductEntity(3L, "product3", null, 0.6, ProductStatus.VALID),
+                new ProductEntity(4L, "product4", 10, 0.7, ProductStatus.INVALID));
 
         when(productRepository.findAll()).thenReturn(list);
 
@@ -49,7 +49,7 @@ class ProductEntityPersistenceAdapterTest {
     @Test
     void should_get_the_product_by_id_if_product_exists() {
         // given
-        ProductEntity product = new ProductEntity(1L, "product1", 10, ProductStatus.VALID);
+        ProductEntity product = new ProductEntity(1L, "product1", 10, 0.1, ProductStatus.VALID);
         when(productRepository.findById(1L)).thenReturn(Optional.of(product));
 
         // when

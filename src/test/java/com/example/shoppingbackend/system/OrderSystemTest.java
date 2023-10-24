@@ -121,7 +121,13 @@ public class OrderSystemTest {
         OrderDetailsResponse response = restTemplate.getForObject(url, OrderDetailsResponse.class);
 
         Assertions.assertNotNull(response);
-        Assertions.assertEquals(860, response.getTotalPrice());
+        Assertions.assertEquals(728.00, response.getFinalTotalPrice());
+        Assertions.assertEquals(60.00, response.getOrderProducts().get(0).getOriginalPrice());
+        Assertions.assertEquals(12.00, response.getOrderProducts().get(0).getDiscountedPrice());
+        Assertions.assertEquals(48.00, response.getOrderProducts().get(0).getFinalPrice());
+        Assertions.assertEquals(800.00, response.getOrderProducts().get(1).getOriginalPrice());
+        Assertions.assertEquals(120.00, response.getOrderProducts().get(1).getDiscountedPrice());
+        Assertions.assertEquals(680.00, response.getOrderProducts().get(1).getFinalPrice());
     }
 
     @Test

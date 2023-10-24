@@ -51,10 +51,9 @@ public class OrderService implements GetAllOrdersUseCase, CreateOrderUseCase, Ge
 
     private OrderDetailsResponse convertOrderToOrderDetailResponse(Order order) {
         List<OrderDetailsResponse.OrderProductDetails> orderProductDetails = order.getOrderItems().stream()
-                .map(orderItemEntity -> new OrderDetailsResponse.OrderProductDetails(orderItemEntity.getProduct().getName(),
-                        orderItemEntity.getQuantity(), orderItemEntity.getProduct().getPrice())).toList();
-        Integer totalPrice = orderProductDetails.stream()
-                .mapToInt(orderItem -> orderItem.getPrice() * orderItem.getQuantity()).sum();
-        return new OrderDetailsResponse(orderProductDetails, totalPrice, order.getOrderStatus());
+                .map(orderItem ->
+                        new OrderDetailsResponse.OrderProductDetails(orderItem.getProduct(), orderItem.getQuantity()))
+                .toList();
+        return new OrderDetailsResponse(orderProductDetails, order.getOrderStatus());
     }
 }

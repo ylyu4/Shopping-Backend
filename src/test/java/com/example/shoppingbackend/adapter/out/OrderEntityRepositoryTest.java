@@ -37,7 +37,7 @@ public class OrderEntityRepositoryTest {
         // given
         Integer originalSize = orderRepository.findAll().size();
         CustomerEntity customer = new CustomerEntity("customer");
-        ProductEntity product = new ProductEntity("test1", 20, ProductStatus.VALID);
+        ProductEntity product = new ProductEntity("test1", 20, 0.9, ProductStatus.VALID);
         OrderEntity order = new OrderEntity(customer);
         order.addOrderItem(product, 10);
         entityManager.persistAndFlush(customer);
@@ -58,7 +58,7 @@ public class OrderEntityRepositoryTest {
     void should_get_order_by_id_successfully() {
         // given
         CustomerEntity customer = new CustomerEntity("customer");
-        ProductEntity product = new ProductEntity("test1", 20, ProductStatus.VALID);
+        ProductEntity product = new ProductEntity("test1", 20, 0.9, ProductStatus.VALID);
         OrderEntity order = new OrderEntity(customer);
         order.addOrderItem(product, 10);
         entityManager.persistAndFlush(customer);

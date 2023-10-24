@@ -3,7 +3,6 @@ package com.example.shoppingbackend.application.service;
 import com.example.shoppingbackend.application.port.out.GetCustomerProfilePort;
 import com.example.shoppingbackend.application.port.out.GetOrderDetailPort;
 import com.example.shoppingbackend.application.port.out.SaveOrderPort;
-import com.example.shoppingbackend.domain.constant.ProductStatus;
 import com.example.shoppingbackend.domain.Customer;
 import com.example.shoppingbackend.domain.Order;
 import com.example.shoppingbackend.domain.OrderItem;
@@ -71,7 +70,7 @@ class OrderUseCaseTest {
     void should_return_the_correct_order_response() {
         // given
         Order order = new Order();
-        Product product = new Product(1L, "bike", 130, ProductStatus.VALID);
+        Product product = new Product(1L, "bike", 0.8, 130.0);
         OrderItem orderItem = new OrderItem(product, 3);
         order.setOrderItems(List.of(orderItem));
         Customer customer = new Customer(1L, "jack");
@@ -84,7 +83,7 @@ class OrderUseCaseTest {
 
         // then
         assertEquals(1, response.getOrders().size());
-        assertEquals(390, response.getOrders().get(0).getTotalPrice());
+        assertEquals(312.0, response.getOrders().get(0).getFinalTotalPrice());
     }
 
     @Test
@@ -99,7 +98,7 @@ class OrderUseCaseTest {
     void should_return_the_correct_order_response_by_id() {
         // given
         Order order = new Order();
-        Product product = new Product(1L, "bike", 130, ProductStatus.VALID);
+        Product product = new Product(1L, "bike", 0.8, 130.0);
         OrderItem orderItem = new OrderItem(product, 3);
         order.setOrderItems(List.of(orderItem));
         Customer customer = new Customer(1L, "jack");
@@ -111,7 +110,11 @@ class OrderUseCaseTest {
         OrderDetailsResponse response = orderService.findOrderByOrderId(2L);
 
         // then
-        assertEquals(390, response.getTotalPrice());
+        assertEquals(312.0, response.getFinalTotalPrice());
+        assertEquals(1, response.getOrderProducts().size());
+        assertEquals(390.0, response.getOrderProducts().get(0).getOriginalPrice());
+        assertEquals(78.0, response.getOrderProducts().get(0).getDiscountedPrice());
+        assertEquals(312.0, response.getOrderProducts().get(0).getFinalPrice());
     }
 
     @Test
