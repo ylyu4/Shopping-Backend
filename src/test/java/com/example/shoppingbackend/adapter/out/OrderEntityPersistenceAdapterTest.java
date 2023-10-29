@@ -3,10 +3,13 @@ package com.example.shoppingbackend.adapter.out;
 import com.example.shoppingbackend.adapter.in.request.CreateOrderRequest;
 import com.example.shoppingbackend.adapter.persistence.CustomerEntity;
 import com.example.shoppingbackend.adapter.persistence.OrderEntity;
+import com.example.shoppingbackend.adapter.persistence.ProductEntity;
 import com.example.shoppingbackend.domain.Order;
+import com.example.shoppingbackend.domain.constant.ProductStatus;
 import com.example.shoppingbackend.exception.CustomerNotFoundException;
 import com.example.shoppingbackend.exception.OrderNotFoundException;
 import com.example.shoppingbackend.exception.ProductNotFoundException;
+import com.example.shoppingbackend.exception.ProductStockNotEnoughException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,7 +47,7 @@ class OrderEntityPersistenceAdapterTest {
         order = new OrderEntity();
     }
 
-        @Test
+    @Test
     void should_throw_exception_when_request_id_is_invalid() {
         // given
         when(customerRepository.findById(1L)).thenReturn(Optional.of(new CustomerEntity(1L, "jack")));
@@ -55,6 +58,32 @@ class OrderEntityPersistenceAdapterTest {
 
         // then
         assertThrows(ProductNotFoundException.class, () -> orderPersistenceAdapter.saveOrder(1L, List.of(orderItemRequest)));
+    }
+
+    @Test
+    void should_throw_exception_when_product_stock_is_0() {
+        // given
+        when(customerRepository.findById(1L)).thenReturn(Optional.of(new CustomerEntity(1L, "jack")));
+        when(productRepository.findById(1L)).thenReturn(Optional.of(new ProductEntity(1L, "book", 80, 0.8, ProductStatus.VALID, 0)));
+        CreateOrderRequest.OrderItemRequest orderItemRequest = new CreateOrderRequest.OrderItemRequest();
+        orderItemRequest.setId(1L);
+        orderItemRequest.setQuantity(4);
+
+        // then
+        assertThrows(ProductStockNotEnoughException.class, () -> orderPersistenceAdapter.saveOrder(1L, List.of(orderItemRequest)));
+    }
+
+    @Test
+    void should_throw_exception_when_product_stock_is_less_than_purchase_quantity() {
+        // given
+        when(customerRepository.findById(1L)).thenReturn(Optional.of(new CustomerEntity(1L, "jack")));
+        when(productRepository.findById(1L)).thenReturn(Optional.of(new ProductEntity(1L, "book", 80, 0.8, ProductStatus.VALID, 5)));
+        CreateOrderRequest.OrderItemRequest orderItemRequest = new CreateOrderRequest.OrderItemRequest();
+        orderItemRequest.setId(1L);
+        orderItemRequest.setQuantity(10);
+
+        // then
+        assertThrows(ProductStockNotEnoughException.class, () -> orderPersistenceAdapter.saveOrder(1L, List.of(orderItemRequest)));
     }
 
     @Test

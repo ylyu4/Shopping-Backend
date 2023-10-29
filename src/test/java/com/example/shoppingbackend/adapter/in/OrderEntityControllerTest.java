@@ -11,6 +11,7 @@ import com.example.shoppingbackend.exception.ProductNotFoundException;
 import com.example.shoppingbackend.adapter.in.request.CreateOrderRequest;
 import com.example.shoppingbackend.adapter.in.response.CustomerOrdersResponse;
 import com.example.shoppingbackend.adapter.in.response.OrderDetailsResponse;
+import com.example.shoppingbackend.exception.ProductStockNotEnoughException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,6 +76,16 @@ public class OrderEntityControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(request.write(createOrderRequest).getJson()))
                         .andExpect(status().isCreated());
+    }
+
+    @Test
+    void should_throw_product_stock_not_enough_exception() throws Exception {
+        doThrow(new ProductStockNotEnoughException("not enough")).when(createOrderUseCase).createOrder(any());
+
+        mockMvc.perform(post("/order")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(request.write(createOrderRequest).getJson()))
+                .andExpect(status().isBadRequest());
     }
 
     @Test

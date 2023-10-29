@@ -2,6 +2,7 @@ package com.example.shoppingbackend.application.service;
 
 import com.example.shoppingbackend.application.port.out.GetCustomerProfilePort;
 import com.example.shoppingbackend.application.port.out.GetOrderDetailPort;
+import com.example.shoppingbackend.application.port.out.GetProductDetailPort;
 import com.example.shoppingbackend.application.port.out.SaveOrderPort;
 import com.example.shoppingbackend.domain.Customer;
 import com.example.shoppingbackend.domain.Order;
@@ -12,6 +13,7 @@ import com.example.shoppingbackend.exception.OrderNotFoundException;
 import com.example.shoppingbackend.adapter.in.request.CreateOrderRequest;
 import com.example.shoppingbackend.adapter.in.response.CustomerOrdersResponse;
 import com.example.shoppingbackend.adapter.in.response.OrderDetailsResponse;
+import com.example.shoppingbackend.exception.ProductStockNotEnoughException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,6 +26,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -39,6 +42,9 @@ class OrderUseCaseTest {
 
     @Mock
     GetOrderDetailPort getOrderDetailPort;
+
+    @Mock
+    GetProductDetailPort getProductDetailPort;
 
     @Mock
     GetCustomerProfilePort getCustomerProfilePort;
@@ -123,5 +129,13 @@ class OrderUseCaseTest {
         when(getOrderDetailPort.getOrderById(1L)).thenThrow(new OrderNotFoundException("not found"));
         // then
         assertThrows(OrderNotFoundException.class, () -> orderService.findOrderByOrderId(1L));
+    }
+
+    @Test
+    void should_throw_exception_when_product_quantity_is_not_enough() {
+        // given
+        doThrow(new ProductStockNotEnoughException("not enough")).when(saveOrderPort).saveOrder(any(), any());
+        // then
+        assertThrows(ProductStockNotEnoughException.class, () -> orderService.createOrder(request));
     }
 }

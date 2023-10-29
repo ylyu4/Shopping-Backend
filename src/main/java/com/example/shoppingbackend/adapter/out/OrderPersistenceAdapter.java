@@ -11,6 +11,7 @@ import com.example.shoppingbackend.domain.Order;
 import com.example.shoppingbackend.exception.CustomerNotFoundException;
 import com.example.shoppingbackend.exception.OrderNotFoundException;
 import com.example.shoppingbackend.exception.ProductNotFoundException;
+import com.example.shoppingbackend.exception.ProductStockNotEnoughException;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -37,11 +38,20 @@ public class OrderPersistenceAdapter implements SaveOrderPort, GetOrderDetailPor
         List<OrderItemEntity> orderItems = orderItemRequestList.stream().map(it -> {
             ProductEntity product = productRepository.findById(it.getId()).orElseThrow(() ->
                     new ProductNotFoundException(String.format("Can not find product for this id: %s", id)));
+            if (product.getStock() <= 0 || product.getStock() < it.getQuantity()) {
+                throw new ProductStockNotEnoughException(String.format("The product does not have enough stock. " +
+                        "Product id: %s", product.getId()));
+            }
             return new OrderItemEntity(product, it.getQuantity());
         }).toList();
 
         OrderEntity order = new OrderEntity(customer);
-        orderItems.forEach(it -> order.addOrderItem(it.getProduct(), it.getQuantity()));
+        orderItems.forEach(it -> {
+            ProductEntity product = it.getProduct();
+            order.addOrderItem(product, it.getQuantity());
+            product.updateStock(it.getQuantity());
+            productRepository.save(product);
+        });
         orderRepository.save(order);
     }
 

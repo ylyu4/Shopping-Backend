@@ -29,6 +29,8 @@ public class ProductEntity {
     @Column(name = "product_status")
     private ProductStatus productStatus;
 
+    private Integer stock;
+
     public Long getId() {
         return id;
     }
@@ -49,22 +51,33 @@ public class ProductEntity {
         return productStatus;
     }
 
+    public Integer getStock() {
+        return stock;
+    }
+
+    public void updateStock(Integer quantity) {
+        this.stock -= quantity;
+    }
+
     public ProductEntity(){
 
     }
 
-    public ProductEntity(String name, Integer price, Double discountRate, ProductStatus productStatus) {
+    public ProductEntity(String name, Integer price, Double discountRate, ProductStatus productStatus, Integer stock) {
         this.name = name;
         this.price = price;
         this.discountRate = discountRate;
         this.productStatus = productStatus;
+        this.stock = stock;
     }
 
-    public ProductEntity(Long id, String name, Integer price, Double discountRate, ProductStatus productStatus) {
+    public ProductEntity(Long id, String name, Integer price, Double discountRate, ProductStatus productStatus,
+                         Integer stock) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.discountRate = discountRate;
         this.productStatus = productStatus;
+        this.stock = stock;
     }
 }

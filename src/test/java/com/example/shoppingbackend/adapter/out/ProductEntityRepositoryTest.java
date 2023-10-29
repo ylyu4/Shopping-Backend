@@ -31,7 +31,7 @@ public class ProductEntityRepositoryTest {
     @Test
     void should_find_all_products_from_database_successfully() {
         // given
-        ProductEntity product = new ProductEntity("test1", 20, 0.9, ProductStatus.VALID);
+        ProductEntity product = new ProductEntity("test1", 20, 0.9, ProductStatus.VALID, 100);
         entityManager.persistAndFlush(product);
 
         // when

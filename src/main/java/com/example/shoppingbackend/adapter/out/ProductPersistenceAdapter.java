@@ -20,8 +20,9 @@ public class ProductPersistenceAdapter implements GetProductDetailPort, GetProdu
     }
 
     public List<Product> getAllProduct() {
-        return productRepository.findAll().stream().filter(it -> Objects.nonNull(it.getPrice()) &&
-                it.getProductStatus() == ProductStatus.VALID).map(Product::new).toList();
+        return productRepository.findAll().stream()
+                .filter(it -> Objects.nonNull(it.getPrice()) && it.getProductStatus() == ProductStatus.VALID
+                        && it.getStock() > 0).map(Product::new).toList();
     }
 
     public Product getProductById(Long id) {
