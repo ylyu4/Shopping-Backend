@@ -34,7 +34,8 @@ class ProductEntityPersistenceAdapterTest {
                 new ProductEntity(2L, "product2", 20, 0.8, ProductStatus.VALID, 100),
                 new ProductEntity(3L, "product3", 30, 0.8, ProductStatus.VALID, 0),
                 new ProductEntity(4L, "product4", null, 0.6, ProductStatus.VALID, 100),
-                new ProductEntity(5L, "product5", 10, 0.7, ProductStatus.INVALID, 100));
+                new ProductEntity(5L, "product5", 10, 0.7, ProductStatus.INVALID, 100),
+                new ProductEntity(6L, "product3", 1, 0.0001, ProductStatus.VALID, 100));
 
         when(productRepository.findAll()).thenReturn(list);
 

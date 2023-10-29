@@ -13,6 +13,7 @@ import java.util.Objects;
 @Component
 public class ProductPersistenceAdapter implements GetProductDetailPort, GetProductListPort {
 
+    public static final double MIN_PRICE = 0.01;
     private final ProductRepository productRepository;
 
     public ProductPersistenceAdapter(ProductRepository productRepository) {
@@ -22,7 +23,7 @@ public class ProductPersistenceAdapter implements GetProductDetailPort, GetProdu
     public List<Product> getAllProduct() {
         return productRepository.findAll().stream()
                 .filter(it -> Objects.nonNull(it.getPrice()) && it.getProductStatus() == ProductStatus.VALID
-                        && it.getStock() > 0).map(Product::new).toList();
+                        && it.getStock() > 0).map(Product::new).filter(it -> it.getFinalPrice() >= MIN_PRICE).toList();
     }
 
     public Product getProductById(Long id) {
